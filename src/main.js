@@ -3,12 +3,23 @@ import App from "./App.vue";
 
 import "./scss/styles.sass";
 
-(function setTheme() {
-  const currentTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+const prefersScheme = window.matchMedia(
+  "(prefers-color-scheme: dark)"
+);
 
-  document.documentElement.setAttribute("data-bs-theme", currentTheme);
-})();
+const autoTheme = true;
+
+autoTheme &&
+  (function setTheme() {
+    const currentTheme =
+      prefersScheme.matches
+        ? "dark"
+        : "light";
+
+    document.documentElement.setAttribute(
+      "data-bs-theme",
+      currentTheme
+    );
+  })();
 
 createApp(App).mount("#app");
