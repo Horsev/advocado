@@ -6,7 +6,9 @@
         AvoProgress(:percents="this.tableData.persent", name="Team Performance")
       AvoTable(:table-data="tableData", v-if="tableData?.rows")
       .text-center 
-        a.btn.btn-link.text-secondary(href="#" @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ⊙
+        a.btn.btn-link.text-secondary(href="#" 
+        :class="{'disabled': endpoint === currentEndpoint}"
+        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ⊙
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
     template(v-else)
       .form-floating.m-3(:class="{'shake': isEndpointError}")
@@ -48,7 +50,6 @@ export default {
               setLocalStorage("tableData", this.tableData);
 
               this.endpoints = await getLocalStorage("endpoints") || [];
-
               this.endpoints.indexOf(this.currentEndpoint) === -1 && this.endpoints.push(this.currentEndpoint);
 
               setLocalStorage("endpoints", this.endpoints);
