@@ -1,4 +1,4 @@
-import { byKey } from "../js/utils";
+import { byKey } from "../utils";
 
 export { mapper };
 
@@ -15,7 +15,8 @@ const legend = [
   {
     icon: "🏆",
     title: "Champion",
-    description: "For the 1st place by closed storypoints for last 30 days",
+    description:
+      "For the 1st place by closed storypoints for last 30 days",
   },
   {
     icon: "⚡️",
@@ -25,7 +26,8 @@ const legend = [
   {
     icon: "🌟",
     title: "Star Player",
-    description: "Change > 20% from 30 to 30 days",
+    description:
+      "Change > 20% from 30 to 30 days",
   },
   {
     title: "Team performance",
@@ -34,19 +36,32 @@ const legend = [
   },
 ];
 
-const getArchivments = (last30SP, result, idx) =>
+const getArchivments = (
+  last30SP,
+  result,
+  idx
+) =>
   (!idx ? "🏆" : "") +
-  (last30SP > SP_PER_ENGINEER ? "⚡️" : "") +
+  (last30SP > SP_PER_ENGINEER
+    ? "⚡️"
+    : "") +
   (result > 20 ? "🌟" : "");
 
-const totalSP = (data) => data.reduce(sumByKey("last30SP"), 0);
+const totalSP = (data) =>
+  data.reduce(sumByKey("last30SP"), 0);
 
-const sumByKey = (key) => (acc, val) => acc + val[key];
+const sumByKey = (key) => (acc, val) =>
+  acc + val[key];
 
 const getPerformance = (data) =>
-  (totalSP(data) / (SP_PER_ENGINEER * data.length)) * 100;
+  (totalSP(data) /
+    (SP_PER_ENGINEER * data.length)) *
+  100;
 
-const parser = ({ result, name, last30SP, prev30SP }, idx) => [
+const parser = (
+  { result, name, last30SP, prev30SP },
+  idx
+) => [
   {
     type: "avatar",
     name,
@@ -54,7 +69,11 @@ const parser = ({ result, name, last30SP, prev30SP }, idx) => [
   {
     type: "name",
     name,
-    archivments: getArchivments(last30SP, result, idx),
+    archivments: getArchivments(
+      last30SP,
+      result,
+      idx
+    ),
   },
   last30SP,
   prev30SP,
@@ -64,11 +83,19 @@ const parser = ({ result, name, last30SP, prev30SP }, idx) => [
   },
 ];
 
-const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
+const th = [
+  "",
+  "Name",
+  { sorted: true, name: "Last" },
+  "Previous",
+  "Change",
+];
 
 const mapper = (data) => ({
   th,
-  rows: data.sort(byKey("last30SP")).map(parser),
+  rows: data
+    .sort(byKey("last30SP"))
+    .map(parser),
   persent: getPerformance(data),
   avatars: AVATARS,
   legend,

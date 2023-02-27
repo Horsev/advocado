@@ -8,7 +8,7 @@
       .text-center 
         a.btn.btn-link.text-secondary(href="#" 
         :class="{'disabled': endpoint === currentEndpoint}"
-        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ⊙
+        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ●
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
     template(v-else)
       .form-floating.m-3(:class="{'shake': isEndpointError}")
@@ -43,7 +43,7 @@ export default {
         .then((response) => response.json())
         .then(async (data) => {
 
-          import(`./js/${MAPPERS[this.currentEndpoint]}.js`)
+          import(`./js/teams/${MAPPERS[this.currentEndpoint]}.js`)
             .then(async ({ mapper }) => {
               this.tableData = mapper(data);
 
@@ -71,6 +71,7 @@ export default {
   },
   async beforeMount() {
     this.tableData = await getLocalStorage("tableData");
+    this.endpoints = await getLocalStorage("endpoints") || [];
   },
   async mounted() {
     [this.currentEndpoint] = await getLocalStorage("endpoints") || [];
