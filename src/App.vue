@@ -1,14 +1,18 @@
 <template lang="pug">
 #app.container-md.px-0.d-flex
   .my-auto.w-100
-    template(v-if="endpoint")
+    template(v-if="currentEndpoint && !addNewEndpoint")
       .p-2(v-if="tableData?.persent")
         AvoProgress(:percents="this.tableData.persent", name="Team Performance")
       AvoTable(:table-data="tableData", v-if="tableData?.rows")
+      .text-center 
+        a.btn.btn-link.text-secondary(href="#" @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ⊙
+        a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
     template(v-else)
       .form-floating.m-3(:class="{'shake': isEndpointError}")
-        input#endpoint.form-control(type='text' placeholder='Endpoint' v-model="endpoint")
-        label(for='endpoint') Enter endpoint
+        input#currentEndpoint.form-control(type='text' placeholder='currentEndpoint' v-model="currentEndpoint")
+        label(for='currentEndpoint') Enter currentEndpoint
+
 
 AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
 </template>
@@ -26,46 +30,54 @@ import { reUrl } from "./js/regexp"
 export default {
   data: () => ({
     tableData: {},
-    endpoint: "",
-    isEndpointError: false
+    currentEndpoint: "",
+    endpoints: [],
+    isEndpointError: false,
+    addNewEndpoint: false,
   }),
   methods: {
-    updateData() {
-      fetch(this.endpoint)
+    async updateData() {
+      await fetch(this.currentEndpoint)
         .then((response) => response.json())
-        .then((data) => {
+        .then(async (data) => {
 
-          import(`./js/${MAPPERS[this.endpoint]}.js`)
-            .then(({ mapper }) => {
+          import(`./js/${MAPPERS[this.currentEndpoint]}.js`)
+            .then(async ({ mapper }) => {
               this.tableData = mapper(data);
+
+              setLocalStorage("tableData", this.tableData);
+
+              this.endpoints = await getLocalStorage("endpoints") || [];
+
+              this.endpoints.indexOf(this.currentEndpoint) === -1 && this.endpoints.push(this.currentEndpoint);
+
+              setLocalStorage("endpoints", this.endpoints);
+
             })
             .catch((err) => {
               console.log(err);
             });
-
-          setLocalStorage("tableData", this.tableData);
-          setLocalStorage("endpoint", this.endpoint);
         });
     }
   },
   async beforeMount() {
-    this.percents = await getLocalStorage("percents");
     this.tableData = await getLocalStorage("tableData");
   },
   async mounted() {
-    this.endpoint = await getLocalStorage("endpoint");
-    !!this.endpoint && this.updateData();
+    [this.currentEndpoint] = await getLocalStorage("endpoints") || [];
+    !!this.currentEndpoint && this.updateData();
   },
   watch: {
-    endpoint(to) {
+    currentEndpoint(to) {
       if (reUrl.test(to)) {
+        this.addNewEndpoint = false;
         this.updateData()
       } else if (to) {
         this.isEndpointError = true;
         setTimeout(() => {
           this.isEndpointError = false;
         }, 500)
-        this.endpoint = ""
+        this.currentEndpoint = ""
       }
     },
   },
