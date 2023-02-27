@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cd dist && zip -r extension_$(date +%d-%m-%y_%H-%M).zip .",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,33 +1,32 @@
 <template lang="pug">
-table.table
-  thead
-    tr
-      th(style="width: 1%")
-      th Name
-      th.text-nowrap Last ↓
-      th Previous
-      th Change
-  tbody
-    tr(v-for="row in rows" :key="row.name")
-      td
-        img.avatar(:src="avatars[row.name]" :alt="row.name")
-      td {{ row.name }}
-        .archivments {{ row.archivments }}
-      td {{ row.last30SP }}
-      td {{ row.prev30SP }}
-      td
-        span.badge(
-          :class="getBgColor(getPercents(row.last30SP, row.prev30SP))") {{ getPercents(row.last30SP, row.prev30SP).toFixed(2) }}%
-
+.table-responsive
+  table.table
+    thead
+      tr
+        th(v-for="th in tableData.th")
+          span.sorted(v-if="th.sorted") {{ th.name }} 
+          template(v-else) {{ th }}
+    tbody
+      tr(v-for="row in tableData.rows")
+        td(v-for="cell in row", :class="{ 'text-end': cell.type === 'percent' || cell.type === 'currency' }", :style="cell.type === 'avatar' &&  'width: 1%'")
+          template(v-if="cell.type === 'avatar'")
+            img.avatar(:src="tableData.avatars[cell.name]")
+          template(v-else-if="cell.type === 'name'")
+            span {{ cell.name }}
+            .archivments {{ cell.archivments }}
+          template(v-else-if="cell.type === 'currency'")  {{ toUKCurrency(cell.value) }}
+          template(v-else-if="cell.type === 'percent'") 
+            span.badge(:class="getBgColor(cell.value)") {{ cell.value.toFixed(2) }}%
+          template(v-else) {{ cell }}
 </template>
 
 <script>
-
+import { toUKCurrency } from "../js/utils";
 import { getColor } from "../js/utils";
 
 export default {
   props: {
-    rows: Array,
+    tableData: Object,
     avatars: Object,
     grades: {
       type: Array,
@@ -39,11 +38,11 @@ export default {
     },
   },
   methods: {
+    toUKCurrency,
     getBgColor(percents) {
       const { grades, colors } = this;
       return `bg-${getColor(grades, colors)(percents)}`
-    },
-    getPercents: (last30SP, prev30SP) => ((last30SP / prev30SP - 1) * 100)
+    }
   }
 }
 </script>
@@ -53,6 +52,11 @@ table
 	&.table 
 		th 
 			font-size: 0.75rem 
+  
+	tr
+		&:last-child
+			td
+				border-bottom: 0
 
 .avatar 
 	width: 3rem 
@@ -60,5 +64,9 @@ table
 	border-radius: 25% 
 
 .archivments 
-	letter-spacing: 0.5rem 
+	letter-spacing: 0.5rem
+.sorted
+	&::before
+		content: "⇅"
+		margin-right: 0.25rem
 </style>

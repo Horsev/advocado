@@ -1,39 +1,56 @@
+<template lang="pug">
+#app.container-md.px-0.d-flex
+  .my-auto.w-100
+    template(v-if="endpoint")
+      .p-2(v-if="tableData?.persent")
+        AvoProgress(:percents="this.tableData.persent", name="Team Performance")
+      AvoTable(:table-data="tableData", v-if="tableData?.rows")
+    template(v-else)
+      .form-floating.m-3(:class="{'shake': isEndpointError}")
+        input#endpoint.form-control(type='text' placeholder='Endpoint' v-model="endpoint")
+        label(for='endpoint') Enter endpoint
+
+AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
+</template>
+
 <script>
 import { getLocalStorage, setLocalStorage } from "./js/localstorage";
 import AvoFooter from './components/AvoFooter.vue';
 import AvoTable from './components/AvoTable.vue';
 import AvoProgress from './components/AvoProgress.vue';
 
-import { AVATARS } from "./js/constants";
+import { MAPPERS } from "./js/constants";
 
 import { reUrl } from "./js/regexp"
 
-import { byLast30SP, getPerformance, getArchivments } from "./js/engineers";
-
 export default {
   data: () => ({
-    engineers: [],
-    percents: 0,
+    tableData: {},
     endpoint: "",
-    isEndpointError: false,
-    AVATARS
+    isEndpointError: false
   }),
   methods: {
     updateData() {
       fetch(this.endpoint)
         .then((response) => response.json())
         .then((data) => {
-          this.engineers = data.sort(byLast30SP).map(getArchivments);
-          this.percents = getPerformance(data)
-          setLocalStorage("percents", this.percents);
-          setLocalStorage("engineers", this.engineers);
+
+          import(`./js/${MAPPERS[this.endpoint]}.js`)
+            .then(({ mapper }) => {
+              this.tableData = mapper(data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          setLocalStorage("tableData", this.tableData);
           setLocalStorage("endpoint", this.endpoint);
         });
     }
   },
   async beforeMount() {
     this.percents = await getLocalStorage("percents");
-    this.engineers = await getLocalStorage("engineers");
+    this.tableData = await getLocalStorage("tableData");
   },
   async mounted() {
     this.endpoint = await getLocalStorage("endpoint");
@@ -59,28 +76,12 @@ export default {
 
 </script>
 
-<template lang="pug">
-#app.container-md.px-0.d-flex
-  .my-auto.w-100
-    template(v-if="endpoint && engineers?.length")
-      .p-2
-        AvoProgress(:percents="percents", name="Team Performance")
-      .p-1
-      AvoTable(:rows="engineers" :avatars="AVATARS")
-    template(v-else)
-      .form-floating.m-3(:class="{'shake': isEndpointError}")
-        input#endpoint.form-control(type='text' placeholder='Endpoint' v-model="endpoint")
-        label(for='endpoint') Enter endpoint
-
-AvoFooter
-</template>
-
 <style scoped lang="sass">
 #app
 	min-height: 100vh
 
 .container-md
-	max-width: 720px
+	max-width: 768px
 
 .shake
 	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both

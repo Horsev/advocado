@@ -1,7 +1,5 @@
 const IN_PRODUCTION = process.env.NODE_ENV === "production";
 
-// console.log("\nIN_PRODUCTION", IN_PRODUCTION);
-
 import purgecss from "@fullhuman/postcss-purgecss";
 import autoprefixer from "autoprefixer";
 
@@ -15,19 +13,23 @@ const ScopedClasses = /data-v-.*/;
 export default {
   plugins: [
     autoprefixer,
-    IN_PRODUCTION &&
-      purgecss({
-        content: [`./public/**/*.html`, `./src/**/*.vue`],
-        defaultExtractor(content) {
-          const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");
-          return contentWithoutStyleBlocks.match(CSSSelectors) || [];
-        },
-        safelist: [
-          TransitionsClasses,
-          CursorClasses,
-          RouterLinkClasses,
-          ScopedClasses,
-        ],
-      }),
+    // IN_PRODUCTION &&
+    purgecss({
+      content: [`./public/**/*.html`, `./src/**/*.vue`],
+      defaultExtractor(content) {
+        const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");
+        return contentWithoutStyleBlocks.match(CSSSelectors) || [];
+      },
+      safelist: [
+        "html",
+        "body",
+        /^[data-bs-theme="dark"]/,
+        /^bg-/,
+        TransitionsClasses,
+        CursorClasses,
+        RouterLinkClasses,
+        ScopedClasses,
+      ],
+    }),
   ],
 };
