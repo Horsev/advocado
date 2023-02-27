@@ -50,7 +50,15 @@ export default {
               setLocalStorage("tableData", this.tableData);
 
               this.endpoints = await getLocalStorage("endpoints") || [];
-              this.endpoints.indexOf(this.currentEndpoint) === -1 && this.endpoints.push(this.currentEndpoint);
+
+              const index = this.endpoints.indexOf(this.currentEndpoint);
+
+              if (index === -1) {
+                this.endpoints.push(this.currentEndpoint);
+              } else {
+                this.endpoints.splice(index, 1);
+                this.endpoints.unshift(this.currentEndpoint);
+              }
 
               setLocalStorage("endpoints", this.endpoints);
 
