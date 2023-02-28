@@ -1,4 +1,7 @@
-import { byKey } from "../utils";
+import {
+  byKey,
+  keysEmojiToString,
+} from "../utils";
 
 export { mapper };
 
@@ -11,17 +14,17 @@ const AVATARS = {
   "Vsevolod Vietluzhskykh": "i/v.png",
 };
 
-const legend = [
+const LEGEND = [
   {
     icon: "🏆",
     title: "Champion",
     description:
-      "For the 1st place by closed storypoints for last 30 days",
+      "For the 1st place by closed storypoints for the last 30 days",
   },
   {
     icon: "⚡️",
     title: "High Performer",
-    description: `Storypoints > ${SP_PER_ENGINEER} for last 30 days`,
+    description: `Storypoints > ${SP_PER_ENGINEER} for the last 30 days`,
   },
   {
     icon: "🌟",
@@ -37,15 +40,26 @@ const legend = [
 ];
 
 const getArchivments = (
-  last30SP,
-  result,
-  idx
-) =>
-  (!idx ? "🏆" : "") +
-  (last30SP > SP_PER_ENGINEER
-    ? "⚡️"
-    : "") +
-  (result > 20 ? "🌟" : "");
+  idx,
+  managers
+) => {
+  const сhampion =
+    managers.sort(byKey("last30SP"))[0]
+      .name === managers[idx].name;
+
+  const highPerformer =
+    managers[idx].last30SP >
+    SP_PER_ENGINEER;
+
+  const starPlayer =
+    managers[idx].result > 20;
+
+  return keysEmojiToString({
+    "🏆": сhampion,
+    "⚡️": highPerformer,
+    "🌟": starPlayer,
+  });
+};
 
 const totalSP = (data) =>
   data.reduce(sumByKey("last30SP"), 0);
@@ -60,7 +74,8 @@ const getPerformance = (data) =>
 
 const parser = (
   { result, name, last30SP, prev30SP },
-  idx
+  idx,
+  engineers
 ) => [
   {
     type: "avatar",
@@ -70,9 +85,8 @@ const parser = (
     type: "name",
     name,
     archivments: getArchivments(
-      last30SP,
-      result,
-      idx
+      idx,
+      engineers
     ),
   },
   last30SP,
@@ -98,5 +112,5 @@ const mapper = (data) => ({
     .map(parser),
   persent: getPerformance(data),
   avatars: AVATARS,
-  legend,
+  legend: LEGEND,
 });

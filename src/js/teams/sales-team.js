@@ -1,4 +1,7 @@
-import { byKey } from "../utils";
+import {
+  byKey,
+  keysEmojiToString,
+} from "../utils";
 
 export { mapper };
 
@@ -7,17 +10,17 @@ const AVATARS = {
   "Максим Ковалевский": "i/f97.png",
 };
 
-const legend = [
+const LEGEND = [
   {
     icon: "🏆",
     title: "High Fiver",
     description:
-      "For the 1st place by Success deals storypoints for last 30 days",
+      "The 1st place by Success deals for the last 30 days",
   },
   {
     icon: "🐄",
     title: "Cash Cow",
-    description: `Average deals amount for last 30 days`,
+    description: `Maximum average deals amount for the last 30 days`,
   },
   {
     icon: "🌱",
@@ -68,15 +71,7 @@ const getArchivments = (
       .sort(byKey("growth"))[0].name ===
     managers[idx].name;
 
-  const emojiString = (obj) =>
-    Object.entries(obj)
-      .filter(
-        ([_, value]) => value === true
-      )
-      .map(([key, _]) => key)
-      .join("");
-
-  return emojiString({
+  return keysEmojiToString({
     "🏆": highFiver,
     "🐄": cashCow,
     "🌱": growthHacker,
@@ -130,5 +125,5 @@ const mapper = ({ managers }) => ({
     .sort(byKey("successDeals"))
     .map(parser),
   avatars: AVATARS,
-  legend,
+  legend: LEGEND,
 });
