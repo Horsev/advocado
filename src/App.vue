@@ -8,7 +8,7 @@
       .text-center 
         a.btn.btn-link.text-secondary(href="#" 
         :class="{'disabled': endpoint === currentEndpoint}"
-        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints") ●
+        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints" v-if="endpoints.length > 1") ●
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
     template(v-else)
       .form-floating.m-3(:class="{'shake': isEndpointError}")
@@ -106,7 +106,7 @@ export default {
 	max-width: 768px
 
 .shake
-	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both
+	animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both
 	transform: translate3d(0, 0, 0)
 	backface-visibility: hidden
 	perspective: 1000px
