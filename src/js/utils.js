@@ -21,13 +21,12 @@ const getColor =
 const byKey = (key) => (a, b) =>
   a[key] > b[key] ? -1 : 1;
 
-const toUKCurrency = (amount) => {
-  return amount.toLocaleString("uk", {
+const toUKCurrency = (amount) =>
+  amount.toLocaleString("uk", {
     style: "currency",
     currency: "UAH",
     maximumFractionDigits: 0,
   });
-};
 
 const keysEmojiToString = (obj) =>
   Object.keys(obj)
