@@ -5,7 +5,7 @@ import {
 
 export { mapper };
 
-const SP_PER_ENGINEER = 16;
+const SP_PER_ENGINEER = 20;
 
 const AVATARS = {
   "Eugene Motovilov": "i/e.png",
