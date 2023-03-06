@@ -3,6 +3,7 @@ export {
   byKey,
   toUKCurrency,
   keysEmojiToString,
+  randomizer,
 };
 
 const getColor =
@@ -20,6 +21,9 @@ const getColor =
 
 const byKey = (key) => (a, b) =>
   a[key] > b[key] ? -1 : 1;
+
+const randomizer = () =>
+  Math.random() - 0.5;
 
 const toUKCurrency = (amount) =>
   amount.toLocaleString("uk", {

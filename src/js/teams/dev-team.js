@@ -113,4 +113,5 @@ const mapper = (data) => ({
   persent: getPerformance(data),
   avatars: AVATARS,
   legend: LEGEND,
+  id: "dev-team",
 });

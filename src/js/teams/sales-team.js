@@ -126,4 +126,5 @@ const mapper = ({ managers }) => ({
     .map(parser),
   avatars: AVATARS,
   legend: LEGEND,
+  id: "sales-team",
 });

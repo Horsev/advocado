@@ -4,17 +4,19 @@
     template(v-if="currentEndpoint && !addNewEndpoint")
       .p-2(v-if="tableData?.persent")
         AvoProgress(:percents="this.tableData.persent", name="Team Performance")
-      AvoTable(:table-data="tableData", v-if="tableData?.rows")
+
+      AvoTable(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
+
       .text-center 
         a.btn.btn-link.text-secondary(href="#" 
         :class="{'disabled': endpoint === currentEndpoint}"
         @click="currentEndpoint = endpoint", v-for="endpoint in endpoints" v-if="endpoints.length > 1") ●
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
+
     template(v-else)
       .form-floating.m-3(:class="{'shake': isEndpointError}")
         input#currentEndpoint.form-control(type='text' placeholder='currentEndpoint' v-model="currentEndpoint")
         label(for='currentEndpoint') Enter currentEndpoint
-
 
 AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
 </template>
@@ -39,34 +41,31 @@ export default {
   }),
   methods: {
     async updateData() {
-      await fetch(this.currentEndpoint)
-        .then((response) => response.json())
-        .then(async (data) => {
+      // Define a mapper function that dynamically imports a module based on the current endpoint
+      const importMapper = async (endpoint) => {
+        const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
+        return mapper;
+      }
 
-          import(`./js/teams/${MAPPERS[this.currentEndpoint]}.js`)
-            .then(async ({ mapper }) => {
-              this.tableData = mapper(data);
+      // Fetch data from the current endpoint
+      const response = await fetch(this.currentEndpoint);
+      const data = await response.json();
 
-              setLocalStorage("tableData", this.tableData);
+      // Map the data using the imported mapper function
+      const mapper = await importMapper(this.currentEndpoint);
+      this.tableData = mapper(data);
 
-              this.endpoints = await getLocalStorage("endpoints") || [];
+      // Save the updated data to local storage
+      setLocalStorage("tableData", this.tableData);
 
-              const index = this.endpoints.indexOf(this.currentEndpoint);
+      // Update the list of endpoints in local storage
+      this.endpoints = await getLocalStorage("endpoints") || [];
 
-              if (index === -1) {
-                this.endpoints.push(this.currentEndpoint);
-              } else {
-                this.endpoints.splice(index, 1);
-                this.endpoints.unshift(this.currentEndpoint);
-              }
+      const index = this.endpoints.indexOf(this.currentEndpoint);
+      index === -1 || this.endpoints.splice(index, 1);
+      this.endpoints.unshift(this.currentEndpoint);
 
-              setLocalStorage("endpoints", this.endpoints);
-
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        });
+      setLocalStorage("endpoints", this.endpoints);
     }
   },
   async beforeMount() {

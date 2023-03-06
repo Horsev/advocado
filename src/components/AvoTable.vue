@@ -6,23 +6,28 @@
         th(v-for="th in tableData.th")
           span.sorted(v-if="th.sorted") {{ th.name }} 
           template(v-else) {{ th }}
-    tbody
-      tr(v-for="row in tableData.rows")
+
+    tbody(tag="tbody", name="flip", is="vue:transition-group")
+      tr(v-for="row in tableData.rows", :key="row[0].name")
         td(v-for="cell in row", :class="{ 'text-end': cell.type === 'percent' || cell.type === 'currency' }", :style="cell.type === 'avatar' &&  'width: 1%'")
+
           template(v-if="cell.type === 'avatar'")
             img.avatar(:src="tableData.avatars[cell.name]")
+
           template(v-else-if="cell.type === 'name'")
             span {{ cell.name }}
             .archivments {{ cell.archivments }}
+
           template(v-else-if="cell.type === 'currency'")  {{ toUKCurrency(cell.value) }}
+
           template(v-else-if="cell.type === 'percent'") 
             span.badge(:class="getBgColor(cell.value)") {{ cell.value.toFixed(2) }}%
+
           template(v-else) {{ cell }}
 </template>
 
 <script>
-import { toUKCurrency } from "../js/utils";
-import { getColor } from "../js/utils";
+import { toUKCurrency, getColor } from "../js/utils";
 
 export default {
   props: {
@@ -48,6 +53,10 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.flip-move
+	transition: transform 0.25s
+	transition-timing-function: cubic-bezier(0.52, 0.1, 0.65, 0.93)
+
 table 
 	&.table 
 		th 
