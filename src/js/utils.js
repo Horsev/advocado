@@ -4,7 +4,19 @@ export {
   toUKCurrency,
   keysEmojiToString,
   randomizer,
+  toTitleCase,
 };
+
+const toTitleCase = (string) =>
+  string
+    .split(" ")
+    .map(
+      ([first, ...rest]) =>
+        `${first.toUpperCase()}${rest
+          .join("")
+          .toLocaleLowerCase()}`
+    )
+    .join(" ");
 
 const getColor =
   (grades, colors) => (percent) => {
