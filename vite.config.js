@@ -5,6 +5,9 @@ import { toTitleCase } from "./src/js/utils";
 
 import path from "path";
 
+const isProduction =
+  process.env.NODE_ENV === "production";
+
 const updateManifest = async () => {
   // Resolve paths to manifest.json and package.json files
   const manifestPath = path.resolve(
@@ -17,13 +20,13 @@ const updateManifest = async () => {
   );
 
   // Read package.json to get the application name and version
-  const packageJSON = JSON.parse(
+  const packageFile = JSON.parse(
     fs.readFileSync(packagePath, "utf8")
   );
 
   // Log a message indicating which manifest is being updated
   console.log(
-    `🚀 Update manifest ${packageJSON.name} with version ${packageJSON.version}`
+    `🚀 Update manifest ${packageFile.name} with version ${packageFile.version}`
   );
 
   // Read manifest.json and modify the name and version properties
@@ -34,10 +37,10 @@ const updateManifest = async () => {
     )
   );
   manifest.name = toTitleCase(
-    packageJSON.name
+    packageFile.name
   );
   manifest.version =
-    packageJSON.version;
+    packageFile.version;
 
   // Write the updated manifest.json file
   fs.writeFileSync(
@@ -49,7 +52,8 @@ const updateManifest = async () => {
 export default defineConfig({
   plugins: [
     vue(),
-    await updateManifest(),
+    isProduction &&
+      (await updateManifest()),
   ],
   root: path.resolve(__dirname, "./"),
   resolve: {
