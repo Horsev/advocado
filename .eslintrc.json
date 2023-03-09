@@ -6,6 +6,7 @@
     "prettier/prettier": "error",
     "no-console": "error",
     "no-unused-vars": "warn",
+    "no-unused-expressions": "off",
     "func-names": "warn",
     "no-process-exit": "warn",
     "object-shorthand": "warn",

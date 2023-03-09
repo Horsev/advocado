@@ -1,4 +1,6 @@
 export const log = (data) => {
+  // Check if we are in development mode
+  if (process.env.NODE_ENV !== "development") return;
   // eslint-disable-next-line no-console
   console.log("🥑 Advocado:", data);
 };

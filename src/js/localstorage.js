@@ -1,4 +1,4 @@
-import {log} from "./utils.js";
+import { log } from "./utils";
 
 async function getLocalStorage(key) {
   let data;
