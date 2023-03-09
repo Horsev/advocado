@@ -1,9 +1,4 @@
-import {
-  byKey,
-  keysEmojiToString,
-} from "../utils";
-
-export { mapper };
+import { byKey, keysEmojiToString } from "../utils";
 
 const SP_PER_ENGINEER = 20;
 
@@ -18,8 +13,7 @@ const LEGEND = [
   {
     icon: "🏆",
     title: "Champion",
-    description:
-      "For the 1st place by closed storypoints for the last 30 days",
+    description: "For the 1st place by closed storypoints for the last 30 days",
   },
   {
     icon: "⚡️",
@@ -29,8 +23,7 @@ const LEGEND = [
   {
     icon: "🌟",
     title: "Star Player",
-    description:
-      "Change > 20% from 30 to 30 days",
+    description: "Change > 20% from 30 to 30 days",
   },
   {
     title: "Team performance",
@@ -39,20 +32,13 @@ const LEGEND = [
   },
 ];
 
-const getArchivments = (
-  idx,
-  managers
-) => {
+const getArchivments = (idx, managers) => {
   const сhampion =
-    managers.sort(byKey("last30SP"))[0]
-      .name === managers[idx].name;
+    managers.sort(byKey("last30SP"))[0].name === managers[idx].name;
 
-  const highPerformer =
-    managers[idx].last30SP >
-    SP_PER_ENGINEER;
+  const highPerformer = managers[idx].last30SP > SP_PER_ENGINEER;
 
-  const starPlayer =
-    managers[idx].result > 20;
+  const starPlayer = managers[idx].result > 20;
 
   return keysEmojiToString({
     "🏆": сhampion,
@@ -61,22 +47,14 @@ const getArchivments = (
   });
 };
 
-const totalSP = (data) =>
-  data.reduce(sumByKey("last30SP"), 0);
+const totalSP = (data) => data.reduce(sumByKey("last30SP"), 0);
 
-const sumByKey = (key) => (acc, val) =>
-  acc + val[key];
+const sumByKey = (key) => (acc, val) => acc + val[key];
 
 const getPerformance = (data) =>
-  (totalSP(data) /
-    (SP_PER_ENGINEER * data.length)) *
-  100;
+  (totalSP(data) / (SP_PER_ENGINEER * data.length)) * 100;
 
-const parser = (
-  { result, name, last30SP, prev30SP },
-  idx,
-  engineers
-) => [
+const parser = ({ result, name, last30SP, prev30SP }, idx, engineers) => [
   {
     type: "avatar",
     name,
@@ -84,10 +62,7 @@ const parser = (
   {
     type: "name",
     name,
-    archivments: getArchivments(
-      idx,
-      engineers
-    ),
+    archivments: getArchivments(idx, engineers),
   },
   last30SP,
   prev30SP,
@@ -97,21 +72,15 @@ const parser = (
   },
 ];
 
-const th = [
-  "",
-  "Name",
-  { sorted: true, name: "Last" },
-  "Previous",
-  "Change",
-];
+const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 
-const mapper = (data) => ({
+export const mapper = (data) => ({
   th,
-  rows: data
-    .sort(byKey("last30SP"))
-    .map(parser),
+  rows: data.sort(byKey("last30SP")).map(parser),
   persent: getPerformance(data),
   avatars: AVATARS,
   legend: LEGEND,
   id: "dev-team",
 });
+
+export default mapper;

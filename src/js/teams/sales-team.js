@@ -1,9 +1,4 @@
-import {
-  byKey,
-  keysEmojiToString,
-} from "../utils";
-
-export { mapper };
+import { byKey, keysEmojiToString } from "../utils";
 
 const AVATARS = {
   "Иван Поставной": "i/f81.png",
@@ -14,8 +9,7 @@ const LEGEND = [
   {
     icon: "🏆",
     title: "High Fiver",
-    description:
-      "The 1st place by Success deals for the last 30 days",
+    description: "The 1st place by Success deals for the last 30 days",
   },
   {
     icon: "🐄",
@@ -25,8 +19,7 @@ const LEGEND = [
   {
     icon: "🌱",
     title: "Growth Hacker",
-    description:
-      "Deals to success convertion",
+    description: "Deals to success convertion",
   },
 ];
 
@@ -42,34 +35,21 @@ const th = [
   "ARR",
 ];
 
-const getArchivments = (
-  idx,
-  managers
-) => {
+const getArchivments = (idx, managers) => {
   const highFiver =
-    managers.sort(
-      byKey("successDeals")
-    )[0].name === managers[idx].name;
+    managers.sort(byKey("successDeals"))[0].name === managers[idx].name;
 
   const cashCow =
-    managers.sort(
-      byKey("averageAmountSuccessDeals")
-    )[0].name === managers[idx].name;
+    managers.sort(byKey("averageAmountSuccessDeals"))[0].name ===
+    managers[idx].name;
 
   const growthHacker =
     managers
-      .map(
-        ({
-          name,
-          successDeals,
-          deals,
-        }) => ({
-          name,
-          growth: successDeals / deals,
-        })
-      )
-      .sort(byKey("growth"))[0].name ===
-    managers[idx].name;
+      .map(({ name, successDeals, deals }) => ({
+        name,
+        growth: successDeals / deals,
+      }))
+      .sort(byKey("growth"))[0].name === managers[idx].name;
 
   return keysEmojiToString({
     "🏆": highFiver,
@@ -99,10 +79,7 @@ const parser = (
   {
     type: "name",
     name,
-    archivments: getArchivments(
-      idx,
-      managers
-    ),
+    archivments: getArchivments(idx, managers),
   },
   leads,
   deals,
@@ -119,12 +96,12 @@ const parser = (
   { type: "currency", value: ARR },
 ];
 
-const mapper = ({ managers }) => ({
+export const mapper = ({ managers }) => ({
   th,
-  rows: managers
-    .sort(byKey("successDeals"))
-    .map(parser),
+  rows: managers.sort(byKey("successDeals")).map(parser),
   avatars: AVATARS,
   legend: LEGEND,
   id: "sales-team",
 });
+
+export default mapper;

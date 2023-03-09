@@ -1,5 +1,3 @@
-export { reUrl };
+export const reUrl = /^https:\/\/[\w/\-?=%.]+(&[\w/\-?=%.]+)*$/;
 
-const reUrl = /^https:\/\/[\w/\-?=%.]+(\&[\w/\-?=%.]+)*$/;
-
-// export regex variables to be used in other files
+export default reUrl;

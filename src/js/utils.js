@@ -1,50 +1,48 @@
-export {
+export default {
   getColor,
   byKey,
   toUKCurrency,
   keysEmojiToString,
   randomizer,
   toTitleCase,
+  log,
 };
 
-const toTitleCase = (string) =>
+export const log = (data) => {
+  // eslint-disable-next-line no-console
+  console.log("🥑 Advocado:", data);
+};
+
+export const toTitleCase = (string) =>
   string
     .split(" ")
     .map(
       ([first, ...rest]) =>
-        `${first.toUpperCase()}${rest
-          .join("")
-          .toLocaleLowerCase()}`
+        `${first.toUpperCase()}${rest.join("").toLocaleLowerCase()}`
     )
     .join(" ");
 
-const getColor =
-  (grades, colors) => (percent) => {
-    const defaultColor = colors[0];
+export const getColor = (grades, colors) => (percent) => {
+  const defaultColor = colors[0];
 
-    return grades.reduce(
-      (acc, grade, idx) =>
-        percent > grade
-          ? colors[idx + 1]
-          : acc,
-      defaultColor
-    );
-  };
+  return grades.reduce(
+    (acc, grade, idx) => (percent > grade ? colors[idx + 1] : acc),
+    defaultColor
+  );
+};
 
-const byKey = (key) => (a, b) =>
-  a[key] > b[key] ? -1 : 1;
+export const byKey = (key) => (a, b) => a[key] > b[key] ? -1 : 1;
 
-const randomizer = () =>
-  Math.random() - 0.5;
+export const randomizer = () => Math.random() - 0.5;
 
-const toUKCurrency = (amount) =>
+export const toUKCurrency = (amount) =>
   amount.toLocaleString("uk", {
     style: "currency",
     currency: "UAH",
     maximumFractionDigits: 0,
   });
 
-const keysEmojiToString = (obj) =>
+export const keysEmojiToString = (obj) =>
   Object.keys(obj)
     .filter((key) => obj[key])
     .join("");
