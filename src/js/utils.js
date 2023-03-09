@@ -1,13 +1,3 @@
-export default {
-  getColor,
-  byKey,
-  toUKCurrency,
-  keysEmojiToString,
-  randomizer,
-  toTitleCase,
-  log,
-};
-
 export const log = (data) => {
   // eslint-disable-next-line no-console
   console.log("🥑 Advocado:", data);
@@ -46,3 +36,13 @@ export const keysEmojiToString = (obj) =>
   Object.keys(obj)
     .filter((key) => obj[key])
     .join("");
+
+export default {
+  getColor,
+  byKey,
+  toUKCurrency,
+  keysEmojiToString,
+  randomizer,
+  toTitleCase,
+  log,
+};
