@@ -10,7 +10,7 @@ export const toTitleCase = (string) =>
     .split(" ")
     .map(
       ([first, ...rest]) =>
-        `${first.toUpperCase()}${rest.join("").toLocaleLowerCase()}`
+        `${first.toUpperCase()}${rest.join("").toLowerCase()}`
     )
     .join(" ");
 

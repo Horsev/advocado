@@ -3,10 +3,10 @@
   "plugins": ["prettier"],
   "rules": {
     "no-use-before-define": "off",
+    "no-unused-expressions": "off",
     "prettier/prettier": "error",
     "no-console": "error",
     "no-unused-vars": "warn",
-    "no-unused-expressions": "off",
     "func-names": "warn",
     "no-process-exit": "warn",
     "object-shorthand": "warn",

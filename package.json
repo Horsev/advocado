@@ -13,8 +13,11 @@
     "vue": "~3.2.45"
   },
   "devDependencies": {
+    "purgecss": "^5.0.0",
+    "postcss": "^8.4.21",
     "@fullhuman/postcss-purgecss": "^5.0.0",
     "@fullhuman/vue-cli-plugin-purgecss": "^5.0.0",
+    "sass": "^1.58.3",
     "@vitejs/plugin-vue": "^4.0.0",
     "@volar/vue-language-plugin-pug": "^1.2.0",
     "eslint": "~8.35.0",
@@ -24,10 +27,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "postcss": "^8.4.21",
     "pug": "^3.0.2",
-    "purgecss": "^5.0.0",
-    "sass": "^1.58.3",
     "vite": "~4.1.4",
     "vue-pug-plugin": "^2.0.3"
   },
