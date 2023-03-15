@@ -12,7 +12,7 @@
         td(v-for="cell in row", :class="{ 'text-end': cell.type === 'percent' || cell.type === 'currency' }", :style="cell.type === 'avatar' &&  'width: 1%'")
 
           template(v-if="cell.type === 'avatar'")
-            img.avatar(:src="tableData.avatars[cell.name]")
+            img.avatar(:src="tableData.avatars[cell.name]", :alt="cell.name", v-if="tableData.avatars[cell.name]")
 
           template(v-else-if="cell.type === 'name'")
             span {{ cell.name }}
