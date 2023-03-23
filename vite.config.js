@@ -1,12 +1,22 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { toTitleCase, log } from "./src/js/utils";
+import { fileURLToPath } from "node:url";
 
 const isProduction = process.env.NODE_ENV === "production";
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+
+const rootPath = path.resolve(__dirname, "./");
+
+const bootstrapPath = path.resolve(__dirname, "node_modules/bootstrap");
+
 const updateManifest = async () => {
+  console.log("🚀 Update manifest", isProduction, __dirname);
   // Resolve paths to manifest.json and package.json files
   const manifestPath = path.resolve(__dirname, "public/manifest.json");
   const packagePath = path.resolve(__dirname, "package.json");
@@ -28,12 +38,14 @@ const updateManifest = async () => {
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 };
 
+console.log("🚀 Vite config loaded", isProduction);
+
 export default defineConfig({
   plugins: [vue(), isProduction && updateManifest()],
-  root: path.resolve(__dirname, "./"),
+  rootPath,
   resolve: {
     alias: {
-      "~bootstrap": path.resolve(__dirname, "node_modules/bootstrap"),
+      "~bootstrap": bootstrapPath,
     },
   },
   server: {
@@ -41,4 +53,3 @@ export default defineConfig({
     hot: true,
   },
 });
-

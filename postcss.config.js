@@ -1,7 +1,8 @@
-const IN_PRODUCTION = process.env.NODE_ENV === "production";
-
-import purgecss from "@fullhuman/postcss-purgecss";
 import autoprefixer from "autoprefixer";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import purgecss from "@fullhuman/postcss-purgecss";
+
+const IN_PRODUCTION = process.env.NODE_ENV === "production";
 
 const StyleBlocks = /<style[^]+?<\/style>/gi;
 const CSSSelectors = /[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g;
@@ -10,26 +11,30 @@ const CursorClasses = /^(?!(|.*?:)cursor-move).+-move$/;
 const RouterLinkClasses = /^router-link(|-exact)-active$/;
 const ScopedClasses = /data-v-.*/;
 
+const anyHTMLFile = `./public/**/*.html`;
+const anyVUEFile = `./src/**/*.vue`;
+const darkThemePrefix = 'data-bs-theme="dark"';
+
 export default {
   plugins: [
     autoprefixer,
-    // IN_PRODUCTION &&
-    purgecss({
-      content: [`./public/**/*.html`, `./src/**/*.vue`],
-      defaultExtractor(content) {
-        const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");
-        return contentWithoutStyleBlocks.match(CSSSelectors) || [];
-      },
-      safelist: [
-        "html",
-        "body",
-        /^[data-bs-theme="dark"]/,
-        /^bg-/,
-        TransitionsClasses,
-        CursorClasses,
-        RouterLinkClasses,
-        ScopedClasses,
-      ],
-    }),
+    IN_PRODUCTION &&
+      purgecss({
+        content: [anyHTMLFile, anyVUEFile],
+        defaultExtractor(content) {
+          const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");
+          return contentWithoutStyleBlocks.match(CSSSelectors) || [];
+        },
+        safelist: [
+          "html",
+          "body",
+          darkThemePrefix,
+          /^bg-/,
+          TransitionsClasses,
+          CursorClasses,
+          RouterLinkClasses,
+          ScopedClasses,
+        ],
+      }),
   ],
 };

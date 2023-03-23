@@ -37,10 +37,10 @@ const th = [
 
 const getArchivments = (idx, managers) => {
   const highFiver =
-    managers.sort(byKey("successDeals"))[0].name === managers[idx].name;
+    [...managers].sort(byKey("successDeals"))[0].name === managers[idx].name;
 
   const cashCow =
-    managers.sort(byKey("averageAmountSuccessDeals"))[0].name ===
+    [...managers].sort(byKey("averageAmountSuccessDeals"))[0].name ===
     managers[idx].name;
 
   const growthHacker =
