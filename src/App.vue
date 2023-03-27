@@ -3,9 +3,9 @@
   .my-auto.w-100
     template(v-if="currentEndpoint && !addNewEndpoint")
       .p-2(v-if="tableData?.persent")
-        avo-progress(:percents="this.tableData.persent", name="Team Performance")
+        AvoProgress(:percents="this.tableData.persent", name="Team Performance")
 
-      avo-table(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
+      AvoTable(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
 
       .text-center 
         a.btn.btn-link.text-secondary(href="#" 
@@ -18,7 +18,7 @@
         input#currentEndpoint.form-control(type='text' placeholder='currentEndpoint' v-model="currentEndpoint")
         label(for='currentEndpoint') Enter currentEndpoint
 
-avo-footer(:legend="tableData.legend", v-if="tableData?.legend")
+AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
 </template>
 
 <script>

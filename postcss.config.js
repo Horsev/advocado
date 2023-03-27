@@ -13,7 +13,6 @@ const ScopedClasses = /data-v-.*/;
 
 const anyHTMLFile = `./public/**/*.html`;
 const anyVUEFile = `./src/**/*.vue`;
-const darkThemePrefix = 'data-bs-theme="dark"';
 
 export default {
   plugins: [
@@ -28,8 +27,9 @@ export default {
         safelist: [
           "html",
           "body",
-          darkThemePrefix,
           /^bg-/,
+          /^[data-bs-theme=dark]/,
+          ".version",
           TransitionsClasses,
           CursorClasses,
           RouterLinkClasses,

@@ -16,7 +16,6 @@ const rootPath = path.resolve(__dirname, "./");
 const bootstrapPath = path.resolve(__dirname, "node_modules/bootstrap");
 
 const updateManifest = async () => {
-  console.log("🚀 Update manifest", isProduction, __dirname);
   // Resolve paths to manifest.json and package.json files
   const manifestPath = path.resolve(__dirname, "public/manifest.json");
   const packagePath = path.resolve(__dirname, "package.json");
@@ -25,7 +24,7 @@ const updateManifest = async () => {
   const packageFile = JSON.parse(fs.readFileSync(packagePath, "utf8"));
 
   // Log a message indicating which manifest is being updated
-  log(
+  console.log(
     `🚀 Update manifest ${packageFile.name} with version ${packageFile.version}\n`
   );
 
@@ -37,8 +36,6 @@ const updateManifest = async () => {
   // Write the updated manifest.json file
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 };
-
-console.log("🚀 Vite config loaded", isProduction);
 
 export default defineConfig({
   plugins: [vue(), isProduction && updateManifest()],
