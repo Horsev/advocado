@@ -46,7 +46,7 @@ export default {
     toUKCurrency,
     getBgColor(percents) {
       const { grades, colors } = this;
-      return `bg-${getColor(grades, colors)(percents)}`
+      return `text-bg-${getColor(grades, colors)(percents)}`
     }
   }
 }

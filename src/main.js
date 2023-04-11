@@ -5,13 +5,13 @@ import "./scss/styles.sass";
 
 const autoTheme = true;
 
-const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-
 autoTheme &&
   (function setTheme() {
+    const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     const currentTheme = darkScheme.matches ? "dark" : "light";
+    const HTML = document.documentElement;
 
-    document.documentElement.setAttribute("data-bs-theme", currentTheme);
+    HTML.setAttribute("data-bs-theme", currentTheme);
   })();
 
 createApp(App).mount("#app");
