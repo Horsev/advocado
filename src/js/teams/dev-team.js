@@ -1,6 +1,6 @@
 import { byKey, keysEmojiToString } from "../utils";
 
-const SP_PER_ENGINEER = 20;
+const SP_PER_ENGINEER = 40;
 
 const AVATARS = {
   "Eugene Motovilov": "i/e.png",
