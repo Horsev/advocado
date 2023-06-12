@@ -1,7 +1,9 @@
 # Advocado
 
-=======
+## Build
 
-## Recommended IDE Setup
+Check current version at chrome://extensions/
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Update "version" in `package.json` and run `npm run build`.
+
+Upload `dist/extension_XXXX.zip` to chrome web store at https://chrome.google.com/webstore/devconsole/
