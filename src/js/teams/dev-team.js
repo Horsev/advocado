@@ -7,6 +7,7 @@ const AVATARS = {
   "Aleksandr Novoselskiy": "i/a.png",
   "Daria D": "i/d.png",
   "Vsevolod Vietluzhskykh": "i/v.png",
+  "Artem Chabanenko": "i/a001.png",
 };
 
 const LEGEND = [
@@ -68,7 +69,7 @@ const parser = ({ result, name, last30SP, prev30SP }, idx, engineers) => [
   prev30SP,
   {
     type: "percent",
-    value: result,
+    value: result || 0,
   },
 ];
 
