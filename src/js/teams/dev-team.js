@@ -8,6 +8,8 @@ const AVATARS = {
   "Daria D": "i/d.png",
   "Vsevolod Vietluzhskykh": "i/v.png",
   "Artem Chabanenko": "i/a001.png",
+  "Sergey Nikolaev": "i/s.png",
+  Kulinenko: "i/k.png",
 };
 
 const LEGEND = [
