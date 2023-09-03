@@ -13,12 +13,13 @@
 
           template(v-if="cell.type === 'avatar'")
             img.avatar(:src="tableData.avatars[cell.name]", :alt="cell.name", v-if="tableData.avatars[cell.name]")
+            img.avatar(src="/i/alien.svg", alt="Alien", v-else)
 
           template(v-else-if="cell.type === 'name'")
             span {{ cell.name }}
             .archivments {{ cell.archivments }}
 
-          template(v-else-if="cell.type === 'currency'")  {{ toUKCurrency(cell.value) }}
+          template(v-else-if="cell.type === 'currency'")  {{ cell.value && toUKCurrency(cell.value) }}
 
           template(v-else-if="cell.type === 'percent'") 
             span.badge(:class="getBgColor(cell.value)") {{ cell.value.toFixed(2) }}%

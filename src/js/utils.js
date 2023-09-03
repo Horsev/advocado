@@ -10,7 +10,7 @@ export const toTitleCase = (string) =>
     .split(" ")
     .map(
       ([first, ...rest]) =>
-        `${first.toUpperCase()}${rest.join("").toLowerCase()}`
+        `${first.toUpperCase()}${rest.join("").toLowerCase()}`,
     )
     .join(" ");
 
@@ -19,11 +19,11 @@ export const getColor = (grades, colors) => (percent) => {
 
   return grades.reduce(
     (acc, grade, idx) => (percent > grade ? colors[idx + 1] : acc),
-    defaultColor
+    defaultColor,
   );
 };
 
-export const byKey = (key) => (a, b) => a[key] > b[key] ? -1 : 1;
+export const byKey = (key) => (a, b) => (a[key] > b[key] ? -1 : 1);
 
 export const randomizer = () => Math.random() - 0.5;
 

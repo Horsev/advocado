@@ -9,7 +9,7 @@ const AVATARS = {
   "Vsevolod Vietluzhskykh": "i/v.png",
   "Artem Chabanenko": "i/a001.png",
   "Sergey Nikolaev": "i/s.png",
-  Kulinenko: "i/k.png",
+  "Sergey Kulinenko": "i/k.png",
 };
 
 const LEGEND = [

@@ -1,8 +1,8 @@
 import { byKey, keysEmojiToString } from "../utils";
 
 const AVATARS = {
-  "Иван Поставной": "i/f81.png",
-  "Максим Ковалевский": "i/f97.png",
+  "Іван Поставной": "i/f81.png",
+  "Максим Ковалевський": "i/f97.png",
   "Дарья Васильманова": "i/f101.png",
   "Влад Вобяченко": "i/f103.png",
 };
@@ -72,7 +72,7 @@ const parser = (
     ARR,
   },
   idx,
-  managers
+  managers,
 ) => [
   {
     type: "avatar",
