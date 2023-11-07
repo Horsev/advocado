@@ -1,6 +1,6 @@
 <template lang="pug">
 .table-responsive
-  table.table
+  table.table(:key="tableData.id")
     thead
       tr
         th(v-for="th in tableData.th")
@@ -13,7 +13,7 @@
 
           template(v-if="cell.type === 'avatar'")
             img.avatar(:src="tableData.avatars[cell.name]", :alt="cell.name", v-if="tableData.avatars[cell.name]")
-            img.avatar(src="/i/alien.svg", alt="Alien", v-else)
+            img.avatar-blank(src="/i/alien.svg", alt="Alien", v-else)
 
           template(v-else-if="cell.type === 'name'")
             span {{ cell.name }}
@@ -72,7 +72,10 @@ table
 	width: 3rem 
 	height: 3rem 
 	border-radius: 25% 
-
+.avatar-blank
+	width: 2rem 
+	height: 2rem 
+	margin: 0.5rem
 .archivments 
 	letter-spacing: 0.5rem
 .sorted

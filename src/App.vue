@@ -41,6 +41,9 @@ export default {
   }),
   methods: {
     async updateData() {
+
+      const { currentEndpoint } = this;
+
       // Define a mapper function that dynamically imports a module based on the current endpoint
       const importMapper = async (endpoint) => {
         const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
@@ -48,11 +51,11 @@ export default {
       }
 
       // Fetch data from the current endpoint
-      const response = await fetch(this.currentEndpoint);
+      const response = await fetch(currentEndpoint);
       const data = await response.json();
 
       // Map the data using the imported mapper function
-      const mapper = await importMapper(this.currentEndpoint);
+      const mapper = await importMapper(currentEndpoint);
       this.tableData = mapper(data);
 
       // Save the updated data to local storage
@@ -61,9 +64,9 @@ export default {
       // Update the list of endpoints in local storage
       this.endpoints = await getLocalStorage("endpoints") || [];
 
-      const index = this.endpoints.indexOf(this.currentEndpoint);
-      index === -1 || this.endpoints.splice(index, 1);
-      this.endpoints.unshift(this.currentEndpoint);
+      const index = this.endpoints.indexOf(currentEndpoint);
+
+      index === -1 && this.endpoints.push(currentEndpoint);
 
       setLocalStorage("endpoints", this.endpoints);
     }

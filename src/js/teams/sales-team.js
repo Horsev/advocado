@@ -1,10 +1,10 @@
 import { byKey, keysEmojiToString } from "../utils";
 
+const ID = "sales-team";
+
 const AVATARS = {
   "Іван Поставной": "i/f81.png",
   "Максим Ковалевський": "i/f97.png",
-  "Дарья Васильманова": "i/f101.png",
-  "Влад Вобяченко": "i/f103.png",
 };
 
 const LEGEND = [
@@ -31,10 +31,10 @@ const th = [
   "Leads",
   "Deals",
   "Demo",
-  { sorted: true, name: "Success" },
+  "Success",
   "Total",
   "Average",
-  "ARR",
+  { sorted: true, name: "ARR" },
 ];
 
 const getArchivments = (idx, managers) => {
@@ -103,7 +103,7 @@ export const mapper = ({ managers }) => ({
   rows: managers.sort(byKey("successDeals")).map(parser),
   avatars: AVATARS,
   legend: LEGEND,
-  id: "sales-team",
+  id: ID,
 });
 
 export default mapper;

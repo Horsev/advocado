@@ -1,16 +1,10 @@
 import { byKey, keysEmojiToString } from "../utils";
 
-const ID = "dev-team";
+const ID = "poster-team";
 
-const SP_PER_ENGINEER = 40;
+const SP_PER_ENGINEER = 20;
 
 const AVATARS = {
-  "Eugene Motovilov": "i/e.png",
-  "Aleksandr Novoselskiy": "i/a.png",
-  "Daria D": "i/d.png",
-  "Vsevolod Vietluzhskykh": "i/v.png",
-  "Artem Chabanenko": "i/a001.png",
-  "Sergey Nikolaev": "i/s.png",
   "Sergey Kulinenko": "i/k.png",
 };
 
