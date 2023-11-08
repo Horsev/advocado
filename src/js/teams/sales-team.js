@@ -1,6 +1,6 @@
 import { sortByKey, keysEmojiToString } from "../utils";
 
-const ID = "sales-team";
+const id = "sales-team";
 
 const AVATARS = {
   "Іван Поставной": "i/f81.png",
@@ -100,11 +100,11 @@ const parser = (
 ];
 
 export const mapper = ({ managers }) => ({
+  id,
   th,
   rows: managers.sort(sortByKey("successDeals")).map(parser),
   avatars: AVATARS,
   legend: LEGEND,
-  id: ID,
 });
 
 export default mapper;

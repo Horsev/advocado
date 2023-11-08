@@ -3,7 +3,7 @@
   .my-auto.w-100
     template(v-if="currentEndpoint && !addNewEndpoint")
       .p-2(v-if="tableData?.percent")
-        AvoProgress(:percents="this.tableData.percent", name="Team Performance")
+        AvoProgress(:percents="this.tableData.percent", :name="this.tableData.id || 'Team Performance'")
 
       AvoTable(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
 

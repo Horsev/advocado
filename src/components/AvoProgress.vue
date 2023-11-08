@@ -1,5 +1,7 @@
 <template lang="pug">
-p.mb-2 {{ name }}
+.d-flex.mb-2
+  div Team Performance
+  .ms-auto.me-1 {{ name }}
 .progress(
   role='progressbar' 
   aria-label='Success example' 

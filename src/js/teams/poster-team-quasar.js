@@ -1,6 +1,6 @@
 import { getLegend, getPerformance, getRows } from "../gamification";
 
-const id = "quasar";
+const id = "Quasar";
 
 const SP_PER_ENGINEER = 20;
 

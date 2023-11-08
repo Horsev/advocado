@@ -1,16 +1,13 @@
 import { getLegend, getPerformance, getRows } from "../gamification";
 
-const id = "PHP";
+const id = "James Webb";
 
-const SP_PER_ENGINEER = 40;
+const SP_PER_ENGINEER = 20;
+
+const AVATARS = {};
 
 const NAMES = {};
 
-const AVATARS = {
-  "Aleksandr Novoselskiy": "i/a.png",
-  "Sergey Nikolaev": "i/s.png",
-  "Sergey Kulinenko": "i/k.png",
-};
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 
 export const mapper = (data) => ({
