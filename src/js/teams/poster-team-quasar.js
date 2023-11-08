@@ -5,11 +5,11 @@ const id = "quasar";
 const SP_PER_ENGINEER = 20;
 
 const AVATARS = {
-  "alexgoogole@gmail.com": "i/ah.jpg",
+  "a.hohol@joinposter.com": "i/ah.jpg",
 };
 
 const NAMES = {
-  "alexgoogole@gmail.com": "Alexander Hohol",
+  "a.hohol@joinposter.com": "Alexander Hohol",
 };
 
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
