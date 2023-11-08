@@ -9,7 +9,7 @@
 
       .text-center 
         a.btn.btn-link.text-secondary(href="#" 
-        :class="{'disabled': endpoint === currentEndpoint}"
+        :class="{'disabled': endpoint === currentEndpoint, 'loading': isLoading && endpoint === currentEndpoint }"
         @click="currentEndpoint = endpoint", v-for="endpoint in endpoints" v-if="endpoints.length > 1") ●
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
 
@@ -38,11 +38,14 @@ export default {
     endpoints: [],
     isEndpointError: false,
     addNewEndpoint: false,
+    isLoading: false,
   }),
   methods: {
     async updateData() {
 
       const { currentEndpoint } = this;
+
+      this.isLoading = true;
 
       // Define a mapper function that dynamically imports a module based on the current endpoint
       const importMapper = async (endpoint) => {
@@ -61,6 +64,9 @@ export default {
       // Save the updated data to local storage
       setLocalStorage("tableData", this.tableData);
 
+      // Save the current endpoint to local storage
+      setLocalStorage("currentEndpoint", currentEndpoint);
+
       // Update the list of endpoints in local storage
       this.endpoints = await getLocalStorage("endpoints") || [];
 
@@ -69,14 +75,17 @@ export default {
       index === -1 && this.endpoints.push(currentEndpoint);
 
       setLocalStorage("endpoints", this.endpoints);
+
+      this.isLoading = false;
+
     }
   },
   async beforeMount() {
     this.tableData = await getLocalStorage("tableData");
     this.endpoints = await getLocalStorage("endpoints") || [];
+    this.currentEndpoint = await getLocalStorage("currentEndpoint") || "";
   },
   async mounted() {
-    [this.currentEndpoint] = await getLocalStorage("endpoints") || [];
     !!this.currentEndpoint && this.updateData();
   },
   watch: {
@@ -106,7 +115,16 @@ export default {
 
 .container-md
 	max-width: 768px
-
+.loading
+	animation: blink 1s cubic-bezier(.36,.07,.19,.97) infinite
+  
+@keyframes blink
+	0%
+		opacity: 0.25
+	50%
+		opacity: 1
+	100%
+		opacity: 0.25
 .shake
 	animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both
 	transform: translate3d(0, 0, 0)
