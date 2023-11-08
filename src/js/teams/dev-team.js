@@ -82,7 +82,7 @@ const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 export const mapper = (data) => ({
   th,
   rows: data.sort(sortByKey("last30SP")).map(parser),
-  persent: getPerformance(data),
+  percent: getPerformance(data),
   avatars: AVATARS,
   legend: LEGEND,
   id: ID,
