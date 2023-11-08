@@ -1,4 +1,4 @@
-import { byKey, keysEmojiToString } from "../utils";
+import { sortByKey, keysEmojiToString } from "../utils";
 
 const ID = "sales-team";
 
@@ -39,10 +39,11 @@ const th = [
 
 const getArchivments = (idx, managers) => {
   const highFiver =
-    [...managers].sort(byKey("successDeals"))[0].name === managers[idx].name;
+    [...managers].sort(sortByKey("successDeals"))[0].name ===
+    managers[idx].name;
 
   const cashCow =
-    [...managers].sort(byKey("averageAmountSuccessDeals"))[0].name ===
+    [...managers].sort(sortByKey("averageAmountSuccessDeals"))[0].name ===
     managers[idx].name;
 
   const growthHacker =
@@ -51,7 +52,7 @@ const getArchivments = (idx, managers) => {
         name,
         growth: successDeals / deals,
       }))
-      .sort(byKey("growth"))[0].name === managers[idx].name;
+      .sort(sortByKey("growth"))[0].name === managers[idx].name;
 
   return keysEmojiToString({
     "🏆": highFiver,
@@ -100,7 +101,7 @@ const parser = (
 
 export const mapper = ({ managers }) => ({
   th,
-  rows: managers.sort(byKey("successDeals")).map(parser),
+  rows: managers.sort(sortByKey("successDeals")).map(parser),
   avatars: AVATARS,
   legend: LEGEND,
   id: ID,

@@ -1,4 +1,4 @@
-import { byKey, keysEmojiToString } from "../utils";
+import { sortByKey, keysEmojiToString } from "../utils";
 
 const ID = "dev-team";
 
@@ -39,7 +39,7 @@ const LEGEND = [
 
 const getArchivments = (idx, managers) => {
   const сhampion =
-    managers.sort(byKey("last30SP"))[0].name === managers[idx].name;
+    managers.sort(sortByKey("last30SP"))[0].name === managers[idx].name;
 
   const highPerformer = managers[idx].last30SP > SP_PER_ENGINEER;
 
@@ -81,7 +81,7 @@ const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 
 export const mapper = (data) => ({
   th,
-  rows: data.sort(byKey("last30SP")).map(parser),
+  rows: data.sort(sortByKey("last30SP")).map(parser),
   persent: getPerformance(data),
   avatars: AVATARS,
   legend: LEGEND,

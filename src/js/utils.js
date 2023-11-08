@@ -23,7 +23,9 @@ export const getColor = (grades, colors) => (percent) => {
   );
 };
 
-export const byKey = (key) => (a, b) => (a[key] > b[key] ? -1 : 1);
+export const sortByKey = (key) => (a, b) => (a[key] > b[key] ? -1 : 1);
+
+export const sumByKey = (key) => (acc, val) => acc + val[key];
 
 export const randomizer = () => Math.random() - 0.5;
 
@@ -41,7 +43,8 @@ export const keysEmojiToString = (obj) =>
 
 export default {
   getColor,
-  byKey,
+  sortByKey,
+  sumByKey,
   toUKCurrency,
   keysEmojiToString,
   randomizer,

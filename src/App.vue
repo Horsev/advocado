@@ -27,7 +27,7 @@ import AvoFooter from './components/AvoFooter.vue';
 import AvoTable from './components/AvoTable.vue';
 import AvoProgress from './components/AvoProgress.vue';
 
-import { MAPPERS } from "./js/constants";
+import { MAPPERS } from "./js/teams";
 
 import { reUrl } from "./js/regexp"
 
@@ -126,3 +126,4 @@ export default {
 	40%, 60%
 		transform: translate3d(4px, 0, 0)
 </style>
+./js
