@@ -12,8 +12,6 @@ const NAMES = {
   "alexgoogole@gmail.com": "Alexander Hohol",
 };
 
-const LEGEND = getLegend(SP_PER_ENGINEER);
-
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 
 export const mapper = (data) => ({
@@ -22,7 +20,7 @@ export const mapper = (data) => ({
   rows: getRows(data, NAMES, SP_PER_ENGINEER),
   percent: getPerformance(data, SP_PER_ENGINEER),
   avatars: AVATARS,
-  legend: LEGEND,
+  legend: getLegend(SP_PER_ENGINEER),
 });
 
 export default mapper;

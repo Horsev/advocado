@@ -25,7 +25,7 @@ export const getLegend = (sp) => [
   },
 ];
 
-export const getArchivments = (idx, managers, sp) => {
+export const getAchievements = (idx, managers, sp) => {
   const сhampion =
     managers.sort(sortByKey("last30SP"))[0].name === managers[idx].name;
 
@@ -53,7 +53,7 @@ const parser =
     {
       type: "name",
       name: names[name] || name,
-      archivments: getArchivments(idx, engineers, sp),
+      archivments: getAchievements(idx, engineers, sp),
     },
     last30SP,
     prev30SP,
@@ -66,4 +66,4 @@ const parser =
 export const getRows = (data, names, sp) =>
   data.sort(sortByKey("last30SP")).map(parser(names, sp));
 
-export default { getLegend, getArchivments, getPerformance, getRows };
+export default { getLegend, getPerformance, getRows };
