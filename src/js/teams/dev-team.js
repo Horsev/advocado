@@ -1,25 +1,26 @@
 import { getLegend, getPerformance, getRows } from "../gamification";
 
-const id = "PHP";
-
-const SP_PER_ENGINEER = 40;
-
-const NAMES = {};
-
-const AVATARS = {
-  "Aleksandr Novoselskiy": "i/a.png",
-  "Sergey Nikolaev": "i/s.png",
-  "Sergey Kulinenko": "i/k.png",
+const config = {
+  id: "PHP",
+  sp: 40,
+  names: {},
+  avatars: {
+    "Aleksandr Novoselskiy": "i/a.png",
+    "Sergey Nikolaev": "i/s.png",
+    "Sergey Kulinenko": "i/k.png",
+  },
+  th: ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"],
 };
-const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
+
+const { id, sp, names, avatars, th } = config;
 
 export const mapper = (data) => ({
   id,
   th,
-  rows: getRows(data, NAMES, SP_PER_ENGINEER),
-  percent: getPerformance(data, SP_PER_ENGINEER),
-  avatars: AVATARS,
-  legend: getLegend(SP_PER_ENGINEER),
+  rows: getRows(data, names, sp),
+  percent: getPerformance(data, sp),
+  avatars,
+  legend: getLegend(sp),
 });
 
 export default mapper;

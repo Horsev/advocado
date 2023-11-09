@@ -1,22 +1,22 @@
 import { getLegend, getPerformance, getRows } from "../gamification";
 
-const id = "Milky Way";
+const config = {
+  id: "Milky Way",
+  sp: 20,
+  names: {},
+  avatars: {},
+  th: ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"],
+};
 
-const SP_PER_ENGINEER = 20;
-
-const AVATARS = {};
-
-const NAMES = {};
-
-const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
+const { id, sp, names, avatars, th } = config;
 
 export const mapper = (data) => ({
   id,
   th,
-  rows: getRows(data, NAMES, SP_PER_ENGINEER),
-  percent: getPerformance(data, SP_PER_ENGINEER),
-  avatars: AVATARS,
-  legend: getLegend(SP_PER_ENGINEER),
+  rows: getRows(data, names, sp),
+  percent: getPerformance(data, sp),
+  avatars,
+  legend: getLegend(sp),
 });
 
 export default mapper;
