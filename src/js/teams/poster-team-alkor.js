@@ -6,7 +6,13 @@ const SP_PER_ENGINEER = 20;
 
 const AVATARS = {};
 
-const NAMES = {};
+const NAMES = {
+  "k.zheleznyakova@joinposter.com": "Krystyna Zheleznyakova",
+  "v.lialichev@joinposter.com": "Vlad Lialichev",
+  "e.shin@joinposter.com": "Olena Shin",
+  "r.dzhemilev@joinposter.com": "Roman Dzhemilev",
+  "a.vadkovskiy@joinposter.com": "Oleksii Vadkovskiy",
+};
 
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
 

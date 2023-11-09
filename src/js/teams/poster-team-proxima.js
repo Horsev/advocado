@@ -1,19 +1,16 @@
 import { getLegend, getPerformance, getRows } from "../gamification";
 
-const id = "Quasar";
+const id = "Proxima";
 
 const SP_PER_ENGINEER = 20;
 
-const AVATARS = {
-  "a.hohol@joinposter.com": "i/ah.jpg",
-};
+const AVATARS = {};
 
 const NAMES = {
-  "a.hohol@joinposter.com": "Alexander Hohol",
-  "s.saveliev@joinposter.com": "Serhii Saveliev",
-  "m.babarov@joinposter.com": "Maksym Babarov",
-  "a.yeremeev@joinposter.com": "Andrii Yeremeev",
-  "k.velichko@joinposter.com": "Kateryna Velichko",
+  "v.shatalov@joinposter.com": "Viktor Shatalov",
+  "a.postoyalkina@joinposter.com": "Anastasiia Postoyalkina",
+  "a.babenko@joinposter.com": "Andrii Babenko",
+  "e.bondarev@joinposter.com": "Evgenii Bondarev",
 };
 
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];

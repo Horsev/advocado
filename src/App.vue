@@ -7,8 +7,8 @@
 
       AvoTable(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
 
-      .text-center 
-        a.btn.btn-link.text-secondary(href="#" 
+      .text-center
+        a.btn.btn-link.text-secondary(href="#"
         :class="{'disabled': endpoint === currentEndpoint, 'loading': isLoading && endpoint === currentEndpoint }"
         @click="currentEndpoint = endpoint", v-for="endpoint in endpoints" v-if="endpoints.length > 1") ●
         a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
@@ -117,7 +117,7 @@ export default {
 	max-width: 768px
 .loading
 	animation: blink 1s cubic-bezier(.36,.07,.19,.97) infinite
-  
+
 @keyframes blink
 	0%
 		opacity: 0.25
@@ -134,7 +134,7 @@ export default {
 @keyframes shake
 	10%, 90%
 		transform: translate3d(-1px, 0, 0)
-  
+
 	20%, 80%
 		transform: translate3d(2px, 0, 0)
 
