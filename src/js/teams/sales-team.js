@@ -1,41 +1,42 @@
 import { sortByKey, keysEmojiToString } from "../utils";
 
-const id = "sales-team";
-
-const AVATARS = {
-  "Іван Поставной": "i/f81.png",
-  "Максим Ковалевський": "i/f97.png",
+const config = {
+  id: "sales-team",
+  avatars: {
+    "Іван Поставной": "i/f81.png",
+    "Maksym Pshenichnyi": "i/m.jpg",
+  },
+  legend: [
+    {
+      icon: "🏆",
+      title: "High Fiver",
+      description: "The 1st place by Success deals for the last 30 days",
+    },
+    {
+      icon: "🐄",
+      title: "Cash Cow",
+      description: `Maximum average deals amount for the last 30 days`,
+    },
+    {
+      icon: "🌱",
+      title: "Growth Hacker",
+      description: "Deals to success convertion",
+    },
+  ],
+  th: [
+    "",
+    "Name",
+    "Leads",
+    "Deals",
+    "Demo",
+    "Success",
+    "Total",
+    "Average",
+    { sorted: true, name: "ARR" },
+  ],
 };
 
-const LEGEND = [
-  {
-    icon: "🏆",
-    title: "High Fiver",
-    description: "The 1st place by Success deals for the last 30 days",
-  },
-  {
-    icon: "🐄",
-    title: "Cash Cow",
-    description: `Maximum average deals amount for the last 30 days`,
-  },
-  {
-    icon: "🌱",
-    title: "Growth Hacker",
-    description: "Deals to success convertion",
-  },
-];
-
-const th = [
-  "",
-  "Name",
-  "Leads",
-  "Deals",
-  "Demo",
-  "Success",
-  "Total",
-  "Average",
-  { sorted: true, name: "ARR" },
-];
+const { id, avatars, legend, th } = config;
 
 const getArchivments = (idx, managers) => {
   const highFiver =
@@ -103,8 +104,8 @@ export const mapper = ({ managers }) => ({
   id,
   th,
   rows: managers.sort(sortByKey("successDeals")).map(parser),
-  avatars: AVATARS,
-  legend: LEGEND,
+  avatars,
+  legend,
 });
 
 export default mapper;
