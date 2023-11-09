@@ -20,7 +20,7 @@ export const mapper = (data) => ({
   id,
   th,
   rows: getRows(data, NAMES, SP_PER_ENGINEER),
-  percent: getPerformance(data, NAMES, SP_PER_ENGINEER),
+  percent: getPerformance(data, SP_PER_ENGINEER),
   avatars: AVATARS,
   legend: getLegend(SP_PER_ENGINEER),
 });

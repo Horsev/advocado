@@ -1,7 +1,6 @@
 import { keysEmojiToString, sortByKey, sumByKey } from "./utils";
 
-const totalSP = (data, names) =>
-  data.filter(filterEngineers(names)).reduce(sumByKey("last30SP"), 0);
+const totalSP = (data) => data.reduce(sumByKey("last30SP"), 0);
 
 export const getLegend = (sp) => [
   {
@@ -41,9 +40,8 @@ export const getAchievements = (idx, managers, sp) => {
   });
 };
 
-export const getPerformance = (data, names, sp) =>
-  (totalSP(data, names) / (sp * data.filter(filterEngineers(names)).length)) *
-  100;
+export const getPerformance = (data, sp) =>
+  (totalSP(data) / (sp * data.length)) * 100;
 
 const parser =
   (names, sp) =>
@@ -66,12 +64,6 @@ const parser =
   ];
 
 export const getRows = (data, names, sp) =>
-  data
-    .filter(filterEngineers(names))
-    .sort(sortByKey("last30SP"))
-    .map(parser(names, sp));
+  data.sort(sortByKey("last30SP")).map(parser(names, sp));
 
-export const filterEngineers = (names) => (row) =>
-  !Object.keys(names).length || Object.keys(names).includes(row.name);
-
-export default { getLegend, getPerformance, getRows, filterEngineers };
+export default { getLegend, getPerformance, getRows };
