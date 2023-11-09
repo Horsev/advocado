@@ -7,6 +7,10 @@ export const MAPPERS = {
     "poster-team-james-webb",
   "https://posterpos.app.n8n.cloud/webhook/kpiDev?team=Alkor":
     "poster-team-alkor",
+  "https://posterpos.app.n8n.cloud/webhook/kpiDev?team=Milky%20Way":
+    "poster-team-milky-way",
+  "https://posterpos.app.n8n.cloud/webhook/kpiDev?team=Proxima":
+    "poster-team-proxima",
 };
 
 export default MAPPERS;
