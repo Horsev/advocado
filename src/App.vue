@@ -111,37 +111,43 @@ export default {
 
 <style scoped lang="sass">
 #app
-	min-height: 100vh
+  min-height: 100vh
 
 .container-md
-	max-width: 768px
+  max-width: 768px
+
+a.disabled
+  --bs-btn-disabled-opacity: 0.5
+  transform: scale(0.8)
+
+
 .loading
-	animation: blink 1s cubic-bezier(.36,.07,.19,.97) infinite
+  animation: blink 1s cubic-bezier(.36,.07,.19,.97) infinite
   
 @keyframes blink
-	0%
-		opacity: 0.25
-	50%
-		opacity: 1
-	100%
-		opacity: 0.25
+  0%
+    opacity: 0.25
+  50%
+    opacity: 1
+  100%
+    opacity: 0.25
 .shake
-	animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both
-	transform: translate3d(0, 0, 0)
-	backface-visibility: hidden
-	perspective: 1000px
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both
+  transform: translate3d(0, 0, 0)
+  backface-visibility: hidden
+  perspective: 1000px
 
 @keyframes shake
-	10%, 90%
-		transform: translate3d(-1px, 0, 0)
+  10%, 90%
+    transform: translate3d(-1px, 0, 0)
   
-	20%, 80%
-		transform: translate3d(2px, 0, 0)
+  20%, 80%
+    transform: translate3d(2px, 0, 0)
 
-	30%, 50%, 70%
-		transform: translate3d(-4px, 0, 0)
+  30%, 50%, 70%
+    transform: translate3d(-4px, 0, 0)
 
-	40%, 60%
-		transform: translate3d(4px, 0, 0)
+  40%, 60%
+    transform: translate3d(4px, 0, 0)
 </style>
 ./js
