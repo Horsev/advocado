@@ -4,7 +4,11 @@ const id = "Milky Way";
 
 const SP_PER_ENGINEER = 20;
 
-const AVATARS = {};
+const AVATARS = {
+  "a.novitskiy@joinposter.com": "i/alexnov2.jpg",
+  "y.gandzjur@joinposter.com": "i/yaroslav.jpeg",
+  "a.zabora@joinposter.com": "i/zabora.jpg",
+};
 
 const NAMES = {
   "y.gandzjur@joinposter.com": "Yaroslav Gandzjur",
