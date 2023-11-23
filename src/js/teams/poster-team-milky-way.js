@@ -8,6 +8,7 @@ const AVATARS = {
   "a.novitskiy@joinposter.com": "i/alexnov2.jpg",
   "y.gandzjur@joinposter.com": "i/yaroslav.jpeg",
   "a.zabora@joinposter.com": "i/zabora.jpg",
+  "a.naumenko@joinposter.com": "i/antonn.jpg",
 };
 
 const NAMES = {
