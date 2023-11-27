@@ -9,6 +9,7 @@ const AVATARS = {
   "y.gandzjur@joinposter.com": "i/yaroslav.jpeg",
   "a.zabora@joinposter.com": "i/zabora.jpg",
   "a.naumenko@joinposter.com": "i/antonn.jpg",
+  "a.paramzin@joinposter.com": "i/paramzin.png",
 };
 
 const NAMES = {
@@ -16,7 +17,7 @@ const NAMES = {
   "a.novitskiy@joinposter.com": "Oleksiy Novitskiy",
   "a.naumenko@joinposter.com": "Anton Naumenko",
   "a.zabora@joinposter.com": "Andrii Zabora",
-  // "s.prysiazhnyi@joinposter.com": "Sergii Prysiazhnyi",
+  "a.paramzin@joinposter.com": "Artem Paramzin",
 };
 
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
