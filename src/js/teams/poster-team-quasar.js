@@ -2,7 +2,7 @@ import { getLegend, getPerformance, getRows } from "../gamification";
 
 const id = "Quasar";
 
-const SP_PER_ENGINEER = 20;
+const SP_PER_ENGINEER = 18; // Kate & Alex have 15 SP per week
 
 const AVATARS = {
   "a.hohol@joinposter.com": "i/ah2.jpg",
@@ -17,7 +17,7 @@ const NAMES = {
   "s.saveliev@joinposter.com": "Serhii Saveliev",
   "m.babarov@joinposter.com": "Maksym Babarov",
   "a.yeremeev@joinposter.com": "Andrii Yeremeev",
-  "k.velichko@joinposter.com": "Kateryna Velichko",
+  "k.velichko@joinposter.com": "Kateryna Velychko",
 };
 
 const th = ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"];
