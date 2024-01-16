@@ -1,10 +1,13 @@
 import { sortByKey, keysEmojiToString } from "../utils";
 
+// in red, beige and black, fascism, 3 Reich, halftone, comix, world war 2
+
 const config = {
-  id: "sales-team",
+  id: "Sales plan",
   avatars: {
     "Іван Поставной": "i/f81.png",
     "Maksym Pshenichnyi": "i/m.jpg",
+    "Vitalii Bykovsky": "i/vb.png",
   },
   legend: [
     {
@@ -30,9 +33,9 @@ const config = {
     "Deals",
     "Demo",
     "Success",
-    "Total",
     "Average",
-    { sorted: true, name: "ARR" },
+    { sorted: true, name: "Total" },
+    // { sorted: true, name: "ARR" },
   ],
 };
 
@@ -71,7 +74,7 @@ const parser = (
     successDeals,
     amountSuccessDeals,
     averageAmountSuccessDeals,
-    ARR,
+    // ARR,
   },
   idx,
   managers,
@@ -91,20 +94,54 @@ const parser = (
   successDeals,
   {
     type: "currency",
-    value: amountSuccessDeals,
+    value: averageAmountSuccessDeals,
   },
   {
     type: "currency",
-    value: averageAmountSuccessDeals,
+    value: amountSuccessDeals,
   },
-  { type: "currency", value: ARR },
+
+  // { type: "currency", value: ARR },
 ];
+
+const getPerformance = (managers) => {
+  const salesPlan = 200000;
+
+  const numberOfSellers = managers.length;
+
+  const dateNow = new Date();
+  const dayOfTheMounth = dateNow.getDate();
+
+  const teamSalesRevenuePlan = salesPlan * numberOfSellers;
+
+  const numDays = (yearNow, monthNow) =>
+    new Date(yearNow, monthNow, 0).getDate();
+
+  const [yearNow, monthNow] = [dateNow.getYear(), dateNow.getMonth()];
+
+  const numOfDaysInCurrentMounth = numDays(yearNow, monthNow);
+
+  const currentRevenuePlan =
+    (teamSalesRevenuePlan / numOfDaysInCurrentMounth) * dayOfTheMounth;
+
+  const revenueBySuccessDeals = managers.reduce(
+    (acc, { amountSuccessDeals }) => acc + amountSuccessDeals,
+    0,
+  );
+
+  const teamPerformance = Math.round(
+    (revenueBySuccessDeals / currentRevenuePlan) * 100,
+  );
+
+  return teamPerformance;
+};
 
 export const mapper = ({ managers }) => ({
   id,
   th,
-  rows: managers.sort(sortByKey("successDeals")).map(parser),
+  rows: managers.sort(sortByKey("amountSuccessDeals")).map(parser),
   avatars,
+  percent: getPerformance(managers),
   legend,
 });
 

@@ -8,6 +8,7 @@ const config = {
     "Aleksandr Novoselskiy": "i/a.png",
     "Sergey Nikolaev": "i/s.png",
     "Sergey Kulinenko": "i/k.png",
+    "Radevych Vladyslav": "i/vr.png",
   },
   th: ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"],
 };
