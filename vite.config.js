@@ -37,9 +37,18 @@ const updateManifest = async () => {
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 };
 
+const manifestPlugin = () => ({
+  name: "update-manifest",
+  buildStart: async () => {
+    if (isProduction) {
+      await updateManifest();
+    }
+  },
+});
+
 export default defineConfig({
-  plugins: [vue(), isProduction && updateManifest()],
-  rootPath,
+  plugins: [vue(), isProduction && manifestPlugin()].filter(Boolean),
+  root: rootPath,
   resolve: {
     alias: {
       "~bootstrap": bootstrapPath,

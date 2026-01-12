@@ -23,13 +23,13 @@ AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
 
 <script>
 import { getLocalStorage, setLocalStorage } from "./js/localstorage";
-import AvoFooter from './components/AvoFooter.vue';
-import AvoTable from './components/AvoTable.vue';
-import AvoProgress from './components/AvoProgress.vue';
+import AvoFooter from "./components/AvoFooter.vue";
+import AvoTable from "./components/AvoTable.vue";
+import AvoProgress from "./components/AvoProgress.vue";
 
 import { MAPPERS } from "./js/teams";
 
-import { reUrl } from "./js/regexp"
+import { reUrl } from "./js/regexp";
 
 export default {
   data: () => ({
@@ -42,7 +42,6 @@ export default {
   }),
   methods: {
     async updateData() {
-
       const { currentEndpoint } = this;
 
       this.isLoading = true;
@@ -51,7 +50,7 @@ export default {
       const importMapper = async (endpoint) => {
         const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
         return mapper;
-      }
+      };
 
       // Fetch data from the current endpoint
       const response = await fetch(currentEndpoint);
@@ -68,7 +67,7 @@ export default {
       setLocalStorage("currentEndpoint", currentEndpoint);
 
       // Update the list of endpoints in local storage
-      this.endpoints = await getLocalStorage("endpoints") || [];
+      this.endpoints = (await getLocalStorage("endpoints")) || [];
 
       const index = this.endpoints.indexOf(currentEndpoint);
 
@@ -77,13 +76,12 @@ export default {
       setLocalStorage("endpoints", this.endpoints);
 
       this.isLoading = false;
-
-    }
+    },
   },
   async beforeMount() {
     this.tableData = await getLocalStorage("tableData");
-    this.endpoints = await getLocalStorage("endpoints") || [];
-    this.currentEndpoint = await getLocalStorage("currentEndpoint") || "";
+    this.endpoints = (await getLocalStorage("endpoints")) || [];
+    this.currentEndpoint = (await getLocalStorage("currentEndpoint")) || "";
   },
   async mounted() {
     !!this.currentEndpoint && this.updateData();
@@ -92,21 +90,22 @@ export default {
     currentEndpoint(to) {
       if (reUrl.test(to)) {
         this.addNewEndpoint = false;
-        this.updateData()
+        this.updateData();
       } else if (to) {
         this.isEndpointError = true;
         setTimeout(() => {
           this.isEndpointError = false;
-        }, 500)
-        this.currentEndpoint = ""
+        }, 500);
+        this.currentEndpoint = "";
       }
     },
   },
   components: {
-    AvoFooter, AvoTable, AvoProgress
-  }
-}
-
+    AvoFooter,
+    AvoTable,
+    AvoProgress,
+  },
+};
 </script>
 
 <style scoped lang="sass">
@@ -123,7 +122,7 @@ a.disabled
 
 .loading
   animation: blink 1s cubic-bezier(.36,.07,.19,.97) infinite
-  
+
 @keyframes blink
   0%
     opacity: 0.25
@@ -140,7 +139,7 @@ a.disabled
 @keyframes shake
   10%, 90%
     transform: translate3d(-1px, 0, 0)
-  
+
   20%, 80%
     transform: translate3d(2px, 0, 0)
 
@@ -150,4 +149,3 @@ a.disabled
   40%, 60%
     transform: translate3d(4px, 0, 0)
 </style>
-./js
