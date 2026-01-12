@@ -1,6 +1,6 @@
 <template lang="pug">
 .d-flex.mb-2
-  div Team Performance
+  div Team Performance, {{ percents }}%
   .ms-auto.me-1 {{ name }}
 .progress(
   role='progressbar' 
@@ -21,27 +21,26 @@ export default {
   props: {
     name: {
       type: String,
-      default: "Performance"
+      default: "Performance",
     },
     percents: {
       type: Number,
-      default: 0
+      default: 0,
     },
     grades: {
       type: Array,
-      default: [80, 90, 100]
+      default: [80, 90, 100],
     },
     colors: {
       type: Array,
-      default: ["danger", "warning", "primary", "success"]
+      default: ["danger", "warning", "primary", "success"],
     },
   },
   methods: {
     getBgColor(percents) {
       const { grades, colors } = this;
-      return `bg-${getColor(grades, colors)(percents)}`
+      return `bg-${getColor(grades, colors)(percents)}`;
     },
-  }
-}
-
+  },
+};
 </script>

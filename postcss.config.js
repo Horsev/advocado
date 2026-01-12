@@ -1,6 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
 import autoprefixer from "autoprefixer";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import purgecss from "@fullhuman/postcss-purgecss";
+// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
+import { purgeCSSPlugin } from "@fullhuman/postcss-purgecss";
 
 const IN_PRODUCTION = process.env.NODE_ENV === "production";
 
@@ -18,7 +19,7 @@ export default {
   plugins: [
     autoprefixer,
     IN_PRODUCTION &&
-      purgecss({
+      purgeCSSPlugin({
         content: [anyHTMLFile, anyVUEFile],
         defaultExtractor(content) {
           const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");

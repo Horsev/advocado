@@ -11,6 +11,8 @@ export const MAPPERS = {
     "poster-team-milky-way",
   "https://posterpos.app.n8n.cloud/webhook/kpiDev?team=Proxima":
     "poster-team-proxima",
+  "https://production.5nix.com/api/kpiSales/kpiCurrent?type=web":
+    "sales-team-web",
 };
 
 export default MAPPERS;

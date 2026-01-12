@@ -36,21 +36,21 @@ export default {
     avatars: Object,
     grades: {
       type: Array,
-      default: [-19, 19]
+      default: [-19, 19],
     },
     colors: {
       type: Array,
-      default: ["danger", "info", "success"]
+      default: ["danger", "info", "success"],
     },
   },
   methods: {
     toUKCurrency,
     getBgColor(percents) {
       const { grades, colors } = this;
-      return `text-bg-${getColor(grades, colors)(percents)}`
-    }
-  }
-}
+      return `text-bg-${getColor(grades, colors)(percents)}`;
+    },
+  },
+};
 </script>
 
 <style scoped lang="sass">
@@ -58,25 +58,25 @@ export default {
 	transition: transform 0.25s
 	transition-timing-function: cubic-bezier(0.52, 0.1, 0.65, 0.93)
 
-table 
-	&.table 
-		th 
-			font-size: 0.75rem 
-  
+table
+	&.table
+		th
+			font-size: 0.75rem
+
 	tr
 		&:last-child
 			td
 				border-bottom: 0
 
-.avatar 
-	width: 3rem 
-	height: 3rem 
-	border-radius: 25% 
+.avatar
+	width: 3rem
+	height: 3rem
+	border-radius: 100%
 .avatar-blank
-	width: 2rem 
-	height: 2rem 
+	width: 2rem
+	height: 2rem
 	margin: 0.5rem
-.archivments 
+.archivments
 	letter-spacing: 0.5rem
 .sorted
 	&::before
