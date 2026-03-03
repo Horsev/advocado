@@ -1,14 +1,12 @@
 import { sortByKey, keysEmojiToString } from "../utils";
 
-// in red, beige and black, fascism, 3 Reich, halftone, comix, world war 2
-
 const SALES_PLAN_PER_SELLER = 180000;
 
 const config = {
   id: "Sales plan API",
   avatars: {
-    "Vitalii Bykovsky": "i/bv.jpg",
     "Oleksandra Zahrebelna": "i/zo.jpg",
+    "Yuliia Buryak": "i/by.jpg",
   },
   legend: [
     {
