@@ -30,6 +30,9 @@ import AvoProgress from "./components/AvoProgress.vue";
 import { MAPPERS } from "./js/teams";
 
 import { reUrl } from "./js/regexp";
+import runSalute from "./js/salute.js";
+
+const PERCENT_THRESHOLD = 120;
 
 export default {
   data: () => ({
@@ -84,6 +87,7 @@ export default {
     this.currentEndpoint = (await getLocalStorage("currentEndpoint")) || "";
   },
   async mounted() {
+    if (this.tableData?.percent > 125) runSalute();
     !!this.currentEndpoint && this.updateData();
   },
   watch: {
@@ -99,6 +103,11 @@ export default {
         this.currentEndpoint = "";
       }
     },
+    "tableData.percent": {
+      handler(percent) {
+        if (percent != null && percent > PERCENT_THRESHOLD) runSalute();
+      },
+    },
   },
   components: {
     AvoFooter,
@@ -111,6 +120,17 @@ export default {
 <style scoped lang="sass">
 #app
   min-height: 100vh
+  position: relative
+  z-index: 1
+
+#magicCanvas
+  position: fixed
+  inset: 0
+  width: 100vw
+  height: 100vh
+  z-index: 1001
+  pointer-events: none
+  background: transparent
 
 .container-md
   max-width: 768px

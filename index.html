@@ -8,7 +8,22 @@
     <link rel="icon" href="favicon-32x32.png" />
   </head>
   <body>
+    <canvas id="magicCanvas" style="display: none;"></canvas>
     <div id="app"></div>
+    <style>
+      #magicCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+      }
+      #app {
+        position: relative;
+        z-index: 0;
+      }
+    </style>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

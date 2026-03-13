@@ -77,7 +77,8 @@ table
 	height: 2rem
 	margin: 0.5rem
 .archivments
-	letter-spacing: 0.5rem
+	letter-spacing: 1rem
+	font-size: 2rem
 .sorted
 	&::before
 		content: "⇅"
