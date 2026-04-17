@@ -1,22 +1,27 @@
 <template lang="pug">
   #app.container-md.px-0.d-flex
     .my-auto.w-100
-      template(v-if='currentEndpoint && !addNewEndpoint')
+      template(v-if='isEndpointDashboardVisible(currentEndpoint, addNewEndpoint)')
         .p-2(v-if='tableData.percent')
           AvoProgress(
-            :completion-percent='this.tableData.percent',
-            :name='this.tableData.id || "Team Performance"'
+            :completion-percent='tableData.percent',
+            :name='getProgressDisplayName(tableData.id)'
           )
 
-        AvoTable(:table-data='tableData' v-if='tableData.rows', :key='tableData.id')
+        transition(name='fade' mode='out-in')
+          AvoTable(
+            :table-data='tableData'
+            v-if='hasTableRows(tableData.rows)',
+            :key='tableData.id'
+          )
 
         .text-center
           a.btn.btn-link.text-secondary(
             href='#',
-            :class='{ disabled: endpoint === currentEndpoint, loading: isLoading && endpoint === currentEndpoint }'
+            :class='getEndpointTabClass(endpoint, currentEndpoint, isLoading)'
             @click='currentEndpoint = endpoint'
             v-for='endpoint in endpoints'
-            v-if='endpoints.length > 1'
+            v-if='hasMultipleEndpoints(endpoints)'
           ) ●
           a.btn.btn-link.text-secondary(href='#' @click='addNewEndpoint = true') +
 
@@ -42,43 +47,10 @@ import AvoProgress from './components/AvoProgress.vue';
 import { MAPPERS } from './js/teams';
 
 import { reUrl } from './js/regexp';
-import runSalute from './js/salute';
-import showMagicImage from './js/magicImage';
-
-const PERCENT_THRESHOLDS = [
-  {
-    threshold: 105,
-    run: showMagicImage,
-    imageUrl: '/Man Of Steel Superman Sticker.gif',
-    animation: 'magicImageReveal',
-  },
-  {
-    threshold: 110,
-    run: showMagicImage,
-    imageUrl: '/Loop Win Sticker by Dice Dreams.gif',
-    animation: 'loopWinReveal',
-  },
-  { threshold: 120, run: runSalute },
-];
+import runPercentThresholdAnimations from './js/run-percent-threshold-animations';
 
 const ENDPOINT_NOT_IN_LIST_INDEX = -1;
 const ENDPOINT_ERROR_SHAKE_RESET_MS = 500;
-
-const byThresholdDesc = (a, b) => b.threshold - a.threshold;
-
-const getEntryForPercent = (percent) =>
-  [...PERCENT_THRESHOLDS].sort(byThresholdDesc).find((entry) => percent > entry.threshold);
-
-const runAnimationsForPercent = (percent) => {
-  if (percent == null) return;
-  const entry = getEntryForPercent(percent);
-  if (!entry) return;
-  if (entry.imageUrl != null) {
-    entry.run(entry.imageUrl, entry.animation);
-  } else {
-    entry.run();
-  }
-};
 
 export default {
   components: {
@@ -95,22 +67,21 @@ export default {
     isLoading: false,
   }),
   watch: {
-    currentEndpoint(to) {
-      if (reUrl.test(to)) {
+    currentEndpoint(nextEndpoint) {
+      if (reUrl.test(nextEndpoint)) {
         this.addNewEndpoint = false;
         this.updateData();
-      } else if (to) {
+      } else if (nextEndpoint) {
         this.isEndpointError = true;
-        setTimeout(() => {
+        const clearEndpointErrorShake = () => {
           this.isEndpointError = false;
-        }, ENDPOINT_ERROR_SHAKE_RESET_MS);
+        };
+        setTimeout(clearEndpointErrorShake, ENDPOINT_ERROR_SHAKE_RESET_MS);
         this.currentEndpoint = '';
       }
     },
     'tableData.percent': {
-      handler(percent) {
-        runAnimationsForPercent(percent);
-      },
+      handler: 'onTableDataPercentChanged',
     },
   },
   async beforeMount() {
@@ -119,49 +90,65 @@ export default {
     this.currentEndpoint = (await getLocalStorage('currentEndpoint')) || '';
   },
   async mounted() {
-    runAnimationsForPercent(this.tableData.percent);
+    runPercentThresholdAnimations(this.tableData.percent);
     if (this.currentEndpoint) {
       this.updateData();
     }
   },
   methods: {
-    async updateData() {
-      const { currentEndpoint } = this;
-
-      this.isLoading = true;
-
-      // Define a mapper function that dynamically imports a module based on the current endpoint
-      const importMapper = async (endpoint) => {
-        const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
-        return mapper;
+    isEndpointDashboardVisible(activeEndpoint, isAddEndpointFormOpen) {
+      return Boolean(activeEndpoint) && !isAddEndpointFormOpen;
+    },
+    getProgressDisplayName(teamKey) {
+      return teamKey || 'Team Performance';
+    },
+    hasTableRows(rows) {
+      return Boolean(rows);
+    },
+    hasMultipleEndpoints(persistedEndpoints) {
+      return persistedEndpoints.length > 1;
+    },
+    getEndpointTabClass(tabEndpoint, activeEndpoint, isFetching) {
+      return {
+        disabled: tabEndpoint === activeEndpoint,
+        loading: isFetching && tabEndpoint === activeEndpoint,
       };
-
-      // Fetch data from the current endpoint
-      const response = await fetch(currentEndpoint);
-      const data = await response.json();
-
-      // Map the data using the imported mapper function
-      const mapper = await importMapper(currentEndpoint);
-      this.tableData = normalizeTableDataPayload(mapper(data));
-
-      // Save the updated data to local storage
+    },
+    onTableDataPercentChanged(percent) {
+      runPercentThresholdAnimations(percent);
+    },
+    async loadTeamMapper(endpoint) {
+      const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
+      return mapper;
+    },
+    async fetchEndpointPayloadJson(endpointUrl) {
+      const response = await fetch(endpointUrl);
+      return response.json();
+    },
+    persistSnapshotAfterUpdate(nextCurrentEndpoint) {
       setLocalStorage('tableData', this.tableData);
-
-      // Save the current endpoint to local storage
-      setLocalStorage('currentEndpoint', currentEndpoint);
-
-      // Update the list of endpoints in local storage
+      setLocalStorage('currentEndpoint', nextCurrentEndpoint);
+    },
+    async mergePersistedEndpoints(nextCurrentEndpoint) {
       this.endpoints = (await getLocalStorage('endpoints')) || [];
-
-      const index = this.endpoints.indexOf(currentEndpoint);
-
-      if (index === ENDPOINT_NOT_IN_LIST_INDEX) {
-        this.endpoints.push(currentEndpoint);
+      const existingIndex = this.endpoints.indexOf(nextCurrentEndpoint);
+      if (existingIndex === ENDPOINT_NOT_IN_LIST_INDEX) {
+        this.endpoints.push(nextCurrentEndpoint);
       }
-
       setLocalStorage('endpoints', this.endpoints);
-
-      this.isLoading = false;
+    },
+    async updateData() {
+      const nextCurrentEndpoint = this.currentEndpoint;
+      this.isLoading = true;
+      try {
+        const mapTeamPayload = await this.loadTeamMapper(nextCurrentEndpoint);
+        const rawEndpointPayload = await this.fetchEndpointPayloadJson(nextCurrentEndpoint);
+        this.tableData = normalizeTableDataPayload(mapTeamPayload(rawEndpointPayload));
+        this.persistSnapshotAfterUpdate(nextCurrentEndpoint);
+        await this.mergePersistedEndpoints(nextCurrentEndpoint);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
@@ -184,6 +171,14 @@ export default {
 
 .container-md
   max-width: 768px
+
+:deep(.fade-enter-from),
+:deep(.fade-leave-to)
+  opacity: 0
+
+:deep(.fade-enter-active),
+:deep(.fade-leave-active)
+  transition: opacity 0.25s ease
 
 a.disabled
   --bs-btn-disabled-opacity: 0.5
