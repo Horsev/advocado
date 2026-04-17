@@ -5,10 +5,7 @@ const getCountOfDaysInMonth = (calendarYear, zeroBasedMonthIndex) =>
  * Revenue target for one seller from month start through referenceDate,
  * linearly prorated by calendar days in the month.
  */
-export const getProratedPersonalPlanTarget = ({
-  salesPlanPerSeller,
-  referenceDate,
-}) => {
+export const getProratedPersonalPlanTarget = ({ salesPlanPerSeller, referenceDate }) => {
   const calendarYear = referenceDate.getFullYear();
   const zeroBasedMonthIndex = referenceDate.getMonth();
   const dayOfMonth = referenceDate.getDate();
@@ -36,9 +33,7 @@ export const getPersonalPlanCompletionPercent = ({
   }
 
   const revenue =
-    amountSuccessDeals === undefined || amountSuccessDeals === null
-      ? 0
-      : amountSuccessDeals;
+    amountSuccessDeals === undefined || amountSuccessDeals === null ? 0 : amountSuccessDeals;
 
   return (revenue / proratedPersonalTarget) * 100;
 };

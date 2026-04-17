@@ -1,0 +1,27 @@
+---
+description: Normalize external data once at the edge; avoid repeated nullish checks downstream
+globs: '**/*.{js,vue}'
+alwaysApply: true
+---
+
+# Normalize once at the boundary
+
+External input (HTTP JSON, `req.query`, third-party callbacks) is **untrusted and irregular** (`undefined`, wrong types, partial shapes).
+
+**Do:** right after read/parse (still at the edge), run a small pure **shaper** / normalizer that returns the **contract you want for the rest of the feature** — defaults filled, arrays guaranteed, only fields you use.
+
+**Do not:** scatter `?.`, `|| {}`, `Array.isArray(x) ? x : []`, and `if (payload.foo)` across every consumer. After shaping, treat the object as **trusted** inside that feature.
+
+## Where to put shapers
+
+- **One-off for a component:** module-level `const` next to the component, or a colocated `*-shape.js` if reused.
+- **Shared API:** same folder as the client that owns the contract, or `server/` boundary helpers for SSR/handlers.
+
+## Names
+
+Prefer **verb + noun** for the operation: `normalizeWizardInitPayload` — not generic `normalizeData`.
+
+## Exceptions
+
+- **True optionality** in the domain (e.g. server omits `steps` to mean “no change”) belongs **in the shaped type** (`replacementSteps: null` means skip), not re-checked at every assignment.
+- **Dynamic / forwarded** values (e.g. `res.status(err.statusCode)`) stay as-is at the boundary.

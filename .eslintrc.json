@@ -4,14 +4,27 @@
   "rules": {
     "no-use-before-define": "off",
     "no-unused-expressions": "off",
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "arrowParens": "always",
+        "bracketSpacing": true,
+        "endOfLine": "lf",
+        "printWidth": 100,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 2,
+        "trailingComma": "all"
+      }
+    ],
     "no-console": "error",
     "no-unused-vars": "warn",
     "func-names": "warn",
     "no-process-exit": "warn",
     "object-shorthand": "warn",
     "class-methods-use-this": "warn"
-  },  "env": {
+  },
+  "env": {
     "browser": true,
     "node": true
   }

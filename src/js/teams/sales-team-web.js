@@ -1,59 +1,56 @@
-import { sortByKey, keysEmojiToString } from "../utils";
+import { sortByKey, keysEmojiToString } from '../utils';
 import {
   getPersonalPlanCompletionPercent,
   getProratedPersonalPlanTarget,
-} from "./prorated-sales-plan";
+} from './prorated-sales-plan';
 
 // in red, beige and black, fascism, 3 Reich, halftone, comix, world war 2
 
 const SALES_PLAN_PER_SELLER = 203885;
 
 const config = {
-  id: "Sales plan Web",
+  id: 'Sales plan Web',
   avatars: {
-    "Vaskul Sofia": "i/vs.jpg",
-    "Gleb Orlov": "i/og.jpg",
+    'Vaskul Sofia': 'i/vs.jpg',
+    'Gleb Orlov': 'i/og.jpg',
   },
   legend: [
     {
-      icon: "🏆",
-      title: "High Fiver",
-      description: "The 1st place by Success deals for the last 30 days",
+      icon: '🏆',
+      title: 'High Fiver',
+      description: 'The 1st place by Success deals for the last 30 days',
     },
     {
-      icon: "🐄",
-      title: "Cash Cow",
+      icon: '🐄',
+      title: 'Cash Cow',
       description: `Maximum average deals amount for the last 30 days`,
     },
     {
-      icon: "🌱",
-      title: "Growth Hacker",
-      description: "Deals to success convertion",
+      icon: '🌱',
+      title: 'Growth Hacker',
+      description: 'Deals to success convertion',
     },
   ],
   th: [
-    "",
-    "Name",
-    "Leads",
-    "Deals",
-    "Demo",
-    "Success",
-    "Average",
-    { sorted: true, name: "Total" },
+    '',
+    'Name',
+    'Leads',
+    'Deals',
+    'Demo',
+    'Success',
+    'Average',
+    { sorted: true, name: 'Total' },
     // { sorted: true, name: "ARR" },
   ],
 };
 
 const { id, avatars, legend, th } = config;
 
-const getArchivments = (idx, managers) => {
-  const highFiver =
-    [...managers].sort(sortByKey("successDeals"))[0].name ===
-    managers[idx].name;
+const getSalesAchievementEmojis = (idx, managers) => {
+  const highFiver = [...managers].sort(sortByKey('successDeals'))[0].name === managers[idx].name;
 
   const cashCow =
-    [...managers].sort(sortByKey("averageAmountSuccessDeals"))[0].name ===
-    managers[idx].name;
+    [...managers].sort(sortByKey('averageAmountSuccessDeals'))[0].name === managers[idx].name;
 
   const growthHacker =
     managers
@@ -61,12 +58,12 @@ const getArchivments = (idx, managers) => {
         name,
         growth: successDeals / deals,
       }))
-      .sort(sortByKey("growth"))[0].name === managers[idx].name;
+      .sort(sortByKey('growth'))[0].name === managers[idx].name;
 
   return keysEmojiToString({
-    "🏆": highFiver,
-    "🐄": cashCow,
-    "🌱": growthHacker,
+    '🏆': highFiver,
+    '🐄': cashCow,
+    '🌱': growthHacker,
   });
 };
 
@@ -86,7 +83,7 @@ const parser = (
   referenceDate,
 ) => [
   {
-    type: "avatar",
+    type: 'avatar',
     name,
     personalPlanCompletionPercent: getPersonalPlanCompletionPercent({
       amountSuccessDeals,
@@ -95,20 +92,20 @@ const parser = (
     }),
   },
   {
-    type: "name",
+    type: 'name',
     name,
-    archivments: getArchivments(idx, managers),
+    achievements: getSalesAchievementEmojis(idx, managers),
   },
   leads,
   deals,
   demo,
   successDeals,
   {
-    type: "currency",
+    type: 'currency',
     value: averageAmountSuccessDeals,
   },
   {
-    type: "currency",
+    type: 'currency',
     value: amountSuccessDeals,
   },
 
@@ -140,13 +137,12 @@ const getPerformance = (managers, referenceDate) => {
 export const mapper = ({ managers }) => {
   const referenceDate = new Date();
 
-  const parseRow = (manager, idx) =>
-    parser(manager, idx, managers, referenceDate);
+  const parseRow = (manager, idx) => parser(manager, idx, managers, referenceDate);
 
   return {
     id,
     th,
-    rows: managers.sort(sortByKey("amountSuccessDeals")).map(parseRow),
+    rows: managers.sort(sortByKey('amountSuccessDeals')).map(parseRow),
     avatars,
     percent: getPerformance(managers, referenceDate),
     legend,

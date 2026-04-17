@@ -1,18 +1,15 @@
 export const log = (data) => {
   // Check if we are in development mode
-  if (process.env.NODE_ENV !== "development") return;
+  if (process.env.NODE_ENV !== 'development') return;
   // eslint-disable-next-line no-console
-  console.log("🥑 Advocado:", data);
+  console.log('🥑 Advocado:', data);
 };
 
 export const toTitleCase = (string) =>
   string
-    .split(" ")
-    .map(
-      ([first, ...rest]) =>
-        `${first.toUpperCase()}${rest.join("").toLowerCase()}`,
-    )
-    .join(" ");
+    .split(' ')
+    .map(([first, ...rest]) => `${first.toUpperCase()}${rest.join('').toLowerCase()}`)
+    .join(' ');
 
 export const getColor = (grades, colors) => (percent) => {
   const defaultColor = colors[0];
@@ -30,16 +27,16 @@ export const sumByKey = (key) => (acc, val) => acc + val[key];
 export const randomizer = () => Math.random() - 0.5;
 
 export const toUKCurrency = (amount) =>
-  amount.toLocaleString("uk", {
-    style: "currency",
-    currency: "UAH",
+  amount.toLocaleString('uk', {
+    style: 'currency',
+    currency: 'UAH',
     maximumFractionDigits: 0,
   });
 
 export const keysEmojiToString = (obj) =>
   Object.keys(obj)
     .filter((key) => obj[key])
-    .join("");
+    .join('');
 
 export default {
   getColor,

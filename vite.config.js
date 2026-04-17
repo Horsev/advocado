@@ -1,35 +1,33 @@
-import fs from "node:fs";
-import path from "node:path";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import { toTitleCase, log } from "./src/js/utils";
-import { fileURLToPath } from "node:url";
+import fs from 'node:fs';
+import path from 'node:path';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { toTitleCase, log } from './src/js/utils';
+import { fileURLToPath } from 'node:url';
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-const rootPath = path.resolve(__dirname, "./");
+const rootPath = path.resolve(__dirname, './');
 
-const bootstrapPath = path.resolve(__dirname, "node_modules/bootstrap");
+const bootstrapPath = path.resolve(__dirname, 'node_modules/bootstrap');
 
 const updateManifest = async () => {
   // Resolve paths to manifest.json and package.json files
-  const manifestPath = path.resolve(__dirname, "public/manifest.json");
-  const packagePath = path.resolve(__dirname, "package.json");
+  const manifestPath = path.resolve(__dirname, 'public/manifest.json');
+  const packagePath = path.resolve(__dirname, 'package.json');
 
   // Read package.json to get the application name and version
-  const packageFile = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+  const packageFile = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
 
   // Log a message indicating which manifest is being updated
-  console.log(
-    `🚀 Update manifest ${packageFile.name} with version ${packageFile.version}\n`
-  );
+  console.log(`🚀 Update manifest ${packageFile.name} with version ${packageFile.version}\n`);
 
   // Read manifest.json and modify the name and version properties
-  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   manifest.name = toTitleCase(packageFile.name);
   manifest.version = packageFile.version;
 
@@ -38,7 +36,7 @@ const updateManifest = async () => {
 };
 
 const manifestPlugin = () => ({
-  name: "update-manifest",
+  name: 'update-manifest',
   buildStart: async () => {
     if (isProduction) {
       await updateManifest();
@@ -51,7 +49,7 @@ export default defineConfig({
   root: rootPath,
   resolve: {
     alias: {
-      "~bootstrap": bootstrapPath,
+      '~bootstrap': bootstrapPath,
     },
   },
   server: {

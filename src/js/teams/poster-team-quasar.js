@@ -1,15 +1,15 @@
-import { getLegend, getPerformance, getRows } from "../gamification";
+import { getLegend, getPerformance, getRows } from '../gamification';
 
 const config = {
-  id: "Quasar",
+  id: 'Quasar',
   sp: 20,
   names: {
-    "a.hohol@joinposter.com": "Alexander Hohol",
+    'a.hohol@joinposter.com': 'Alexander Hohol',
   },
   avatars: {
-    "a.hohol@joinposter.com": "i/ah.jpg",
+    'a.hohol@joinposter.com': 'i/ah.jpg',
   },
-  th: ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"],
+  th: ['', 'Name', { sorted: true, name: 'Last' }, 'Previous', 'Change'],
 };
 
 const { id, sp, names, avatars, th } = config;

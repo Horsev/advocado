@@ -1,58 +1,89 @@
 <template lang="pug">
-.table-responsive
-  table.table(:key="tableData.id")
-    thead
-      tr
-        th(v-for="th in tableData.th")
-          span.sorted(v-if="th.sorted") {{ th.name }} 
-          template(v-else) {{ th }}
+  .table-responsive
+    table.table(:key='tableData.id')
+      thead
+        tr
+          th(v-for='header in tableData.th')
+            span.sorted(v-if='header.sorted') {{ header.name }}
+            template(v-else) {{ getTableHeaderLabel(header) }}
 
-    tbody(tag="tbody", name="flip", is="vue:transition-group")
-      tr(v-for="row in tableData.rows", :key="row[0].name")
-        td(v-for="cell in row", :class="{ 'text-end': cell.type === 'percent' || cell.type === 'currency' }", :style="cell.type === 'avatar' &&  'width: 1%'")
+      tbody(tag='tbody' name='flip' is='vue:transition-group')
+        tr(v-for='row in tableData.rows', :key='row[0].name')
+          td(
+            v-for='cell in row',
+            :class='getNumericCellAlignmentClass(cell)',
+            :style='getAvatarColumnStyle(cell)'
+          )
+            template(v-if='cell.type === "avatar"')
+              img.avatar(
+                :src='tableData.avatars[cell.name]',
+                :alt='cell.name'
+                v-if='tableData.avatars[cell.name]'
+              )
+              img.avatar-blank(src='/i/alien.svg' alt='Alien' v-else)
+              span.badge.personal-plan-completion(
+                v-if='cell.personalPlanCompletionPercent',
+                :class='getPersonalPlanCompletionBadgeClass(cell.personalPlanCompletionPercent)'
+              ) {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
 
-          template(v-if="cell.type === 'avatar'")
-            img.avatar(:src="tableData.avatars[cell.name]", :alt="cell.name", v-if="tableData.avatars[cell.name]")
-            img.avatar-blank(src="/i/alien.svg", alt="Alien", v-else)
-            span.badge.personal-plan-completion(
-              v-if="cell.personalPlanCompletionPercent", :class="cell.personalPlanCompletionPercent < 100 ? 'bg-danger' : 'bg-success'") {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
+            template(v-else-if='cell.type === "name"')
+              span {{ cell.name }}
+              .achievements {{ cell.achievements }}
 
-          template(v-else-if="cell.type === 'name'")
-            span {{ cell.name }}
-            .archivments {{ cell.archivments }}
+            template(v-else-if='cell.type === "currency"') {{ formatCurrencyCellValue(cell.value) }}
 
-          template(v-else-if="cell.type === 'currency'")  {{ cell.value && toUKCurrency(cell.value) }}
+            template(v-else-if='cell.type === "percent"')
+              span.badge(:class='getBgColor(cell.value)') {{ formatPercentCellValue(cell.value) }}
 
-          template(v-else-if="cell.type === 'percent'") 
-            span.badge(:class="getBgColor(cell.value)") {{ cell.value.toFixed(2) }}%
-
-          template(v-else) {{ cell }}
+            template(v-else) {{ cell }}
 </template>
 
 <script>
-import { toUKCurrency, getColor } from "../js/utils";
+import { toUKCurrency, getColor } from '../js/utils';
 
 export default {
   props: {
     tableData: Object,
-    avatars: Object,
     grades: {
       type: Array,
       default: [-19, 19],
     },
     colors: {
       type: Array,
-      default: ["danger", "info", "success"],
+      default: ['danger', 'info', 'success'],
     },
   },
   methods: {
     toUKCurrency,
+    getTableHeaderLabel(header) {
+      if (typeof header === 'string') return header;
+      if (header && typeof header.name === 'string') return header.name;
+      return '';
+    },
+    getNumericCellAlignmentClass(cell) {
+      const isNumericAligned = cell.type === 'percent' || cell.type === 'currency';
+      return { 'text-end': isNumericAligned };
+    },
+    getAvatarColumnStyle(cell) {
+      return cell.type === 'avatar' ? 'width: 1%' : undefined;
+    },
+    getPersonalPlanCompletionBadgeClass(percent) {
+      return percent < 100 ? 'bg-danger' : 'bg-success';
+    },
+    formatCurrencyCellValue(amount) {
+      if (amount == null || amount === '') return '';
+      return this.toUKCurrency(amount);
+    },
+    formatPercentCellValue(percent) {
+      if (percent == null || Number.isNaN(Number(percent))) return '';
+      return `${Number(percent).toFixed(2)}%`;
+    },
     formatPersonalPlanCompletionPercent(percent) {
       return `${Math.round(percent)}%`;
     },
-    getBgColor(percents) {
+    getBgColor(percent) {
       const { grades, colors } = this;
-      return `text-bg-${getColor(grades, colors)(percents)}`;
+      return `text-bg-${getColor(grades, colors)(percent)}`;
     },
   },
 };
@@ -60,38 +91,43 @@ export default {
 
 <style scoped lang="sass">
 .flip-move
-	transition: transform 0.25s
-	transition-timing-function: cubic-bezier(0.52, 0.1, 0.65, 0.93)
+  transition: transform 0.25s
+  transition-timing-function: cubic-bezier(0.52, 0.1, 0.65, 0.93)
 
 table
-	&.table
-		th
-			font-size: 0.75rem
+  &.table
+    th
+      font-size: 0.75rem
 
-	tr
-		&:last-child
-			td
-				border-bottom: 0
+  tr
+    &:last-child
+      td
+        border-bottom: 0
+
 .personal-plan-completion
-	font-size: 0.5rem
-	position: relative
-	top: -0.5rem
-	display: flex
-	justify-content: center
-	align-items: center
+  font-size: 0.5rem
+  position: relative
+  top: -0.5rem
+  display: flex
+  justify-content: center
+  align-items: center
+
 .avatar
-	width: 3rem
-	height: 3rem
-	border-radius: 100%
+  width: 3rem
+  height: 3rem
+  border-radius: 100%
+
 .avatar-blank
-	width: 2rem
-	height: 2rem
-	margin: 0.5rem
-.archivments
-	letter-spacing: 1rem
-	font-size: 2rem
+  width: 2rem
+  height: 2rem
+  margin: 0.5rem
+
+.achievements
+  letter-spacing: 1rem
+  font-size: 1.5rem
+
 .sorted
-	&::before
-		content: "⇅"
-		margin-right: 0.25rem
+  &::before
+    content: "⇅"
+    margin-right: 0.25rem
 </style>

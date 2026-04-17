@@ -1,5 +1,5 @@
-let canvas = document.getElementById("magicCanvas");
-let ctx = canvas.getContext("2d", { alpha: true });
+let canvas = document.getElementById('magicCanvas');
+let ctx = canvas.getContext('2d', { alpha: true });
 
 const CONFIG = {
   particleCount: 80,
@@ -27,8 +27,7 @@ const resizeCanvas = () => {
   canvas.height = height;
 };
 
-const getParticleColor = () =>
-  `255, ${randomInt(100, 255)}, ${randomInt(55, 255)}`;
+const getParticleColor = () => `255, ${randomInt(100, 255)}, ${randomInt(55, 255)}`;
 
 class Particle {
   constructor({ x, y, vx, vy, size, color, life }) {
@@ -58,7 +57,7 @@ class Particle {
 
   draw(context) {
     context.save();
-    context.globalCompositeOperation = "source-over";
+    context.globalCompositeOperation = 'source-over';
     context.beginPath();
     context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     context.fillStyle = `rgba(${this.color}, ${this.opacity})`;
@@ -83,9 +82,7 @@ const createParticle = (x, y) => {
 };
 
 const createExplosion = (x, y) => {
-  const newParticles = Array.from({ length: CONFIG.particleCount }, () =>
-    createParticle(x, y),
-  );
+  const newParticles = Array.from({ length: CONFIG.particleCount }, () => createParticle(x, y));
 
   particles.push(...newParticles);
 };
@@ -126,9 +123,9 @@ const animate = () => {
 
 let started = false;
 
-const SALUTE_STORAGE_KEY = "saluteLastPlayed";
+const SALUTE_STORAGE_KEY = 'saluteLastPlayed';
 
-const getTodayKey = () => new Date().toLocaleDateString("en-CA");
+const getTodayKey = () => new Date().toLocaleDateString('en-CA');
 
 export default function runSalute() {
   const today = getTodayKey();
@@ -137,11 +134,11 @@ export default function runSalute() {
 
   if (started) return;
   started = true;
-  canvas = document.getElementById("magicCanvas");
+  canvas = document.getElementById('magicCanvas');
   if (!canvas) return;
-  ctx = canvas.getContext("2d");
-  canvas.style.display = "block";
-  window.addEventListener("resize", resizeCanvas);
+  ctx = canvas.getContext('2d');
+  canvas.style.display = 'block';
+  window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
   createInitialExplosionQueue();
   runNextExplosion();

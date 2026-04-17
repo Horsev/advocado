@@ -1,69 +1,66 @@
-import { keysEmojiToString, sortByKey, sumByKey } from "./utils";
+import { keysEmojiToString, sortByKey, sumByKey } from './utils';
 
-const totalSP = (data) => data.reduce(sumByKey("last30SP"), 0);
+const totalSP = (data) => data.reduce(sumByKey('last30SP'), 0);
 
 export const getLegend = (sp) => [
   {
-    icon: "🏆",
-    title: "Champion",
-    description: "For the 1st place by closed storypoints for the last 30 days",
+    icon: '🏆',
+    title: 'Champion',
+    description: 'For the 1st place by closed storypoints for the last 30 days',
   },
   {
-    icon: "⚡️",
-    title: "High Performer",
+    icon: '⚡️',
+    title: 'High Performer',
     description: `Storypoints > ${sp} for the last 30 days`,
   },
   {
-    icon: "🌟",
-    title: "Star Player",
-    description: "Change > 20% from 30 to 30 days",
+    icon: '🌟',
+    title: 'Star Player',
+    description: 'Change > 20% from 30 to 30 days',
   },
   {
-    title: "Team performance",
+    title: 'Team performance',
     description:
-      "Completed storypoints closed by engineers divided by planned storypoints. Danger < 80%, warning < 90%, normal < 100%, success > 100%",
+      'Completed storypoints closed by engineers divided by planned storypoints. Danger < 80%, warning < 90%, normal < 100%, success > 100%',
   },
 ];
 
 export const getAchievements = (idx, managers, sp) => {
-  const сhampion =
-    managers.sort(sortByKey("last30SP"))[0].name === managers[idx].name;
+  const сhampion = managers.sort(sortByKey('last30SP'))[0].name === managers[idx].name;
 
   const highPerformer = managers[idx].last30SP > sp;
 
   const starPlayer = managers[idx].result > 20;
 
   return keysEmojiToString({
-    "🏆": сhampion,
-    "⚡️": highPerformer,
-    "🌟": starPlayer,
+    '🏆': сhampion,
+    '⚡️': highPerformer,
+    '🌟': starPlayer,
   });
 };
 
-export const getPerformance = (data, sp) =>
-  (totalSP(data) / (sp * data.length)) * 100;
+export const getPerformance = (data, sp) => (totalSP(data) / (sp * data.length)) * 100;
 
 const parser =
   (names, sp) =>
   ({ result, name, last30SP, prev30SP }, idx, engineers) => [
     {
-      type: "avatar",
+      type: 'avatar',
       name,
     },
     {
-      type: "name",
+      type: 'name',
       name: names[name] || name,
-      archivments: getAchievements(idx, engineers, sp),
+      achievements: getAchievements(idx, engineers, sp),
     },
     last30SP,
     prev30SP,
     {
-      type: "percent",
+      type: 'percent',
       value: result || 0,
     },
   ];
 
-export const getRows = (data, names, sp) =>
-  data.sort(sortByKey("last30SP")).map(parser(names, sp));
+export const getRows = (data, names, sp) => data.sort(sortByKey('last30SP')).map(parser(names, sp));
 
 export default { getLegend, getPerformance, getRows };

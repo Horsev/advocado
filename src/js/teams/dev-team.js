@@ -1,16 +1,16 @@
-import { getLegend, getPerformance, getRows } from "../gamification";
+import { getLegend, getPerformance, getRows } from '../gamification';
 
 const config = {
-  id: "PHP",
+  id: 'PHP',
   sp: 40,
   names: {},
   avatars: {
-    "Aleksandr Novoselskiy": "i/a.png",
-    "Sergey Nikolaev": "i/s.png",
-    "Sergey Kulinenko": "i/k.png",
-    "Radevych Vladyslav": "i/vr.png",
+    'Aleksandr Novoselskiy': 'i/a.png',
+    'Sergey Nikolaev': 'i/s.png',
+    'Sergey Kulinenko': 'i/k.png',
+    'Radevych Vladyslav': 'i/vr.png',
   },
-  th: ["", "Name", { sorted: true, name: "Last" }, "Previous", "Change"],
+  th: ['', 'Name', { sorted: true, name: 'Last' }, 'Previous', 'Change'],
 };
 
 const { id, sp, names, avatars, th } = config;

@@ -1,1 +1,19 @@
-{}
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "vueIndentScriptAndStyle": false,
+  "htmlWhitespaceSensitivity": "css",
+  "singleAttributePerLine": true,
+  "plugins": ["@prettier/plugin-pug"],
+  "pugFramework": "vue",
+  "pugSingleFileComponentIndentation": true,
+  "pugAttributeSeparator": "as-needed",
+  "pugWrapAttributesThreshold": -1,
+  "pugPrintWidth": 100
+}

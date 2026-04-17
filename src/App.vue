@@ -1,50 +1,62 @@
 <template lang="pug">
-#app.container-md.px-0.d-flex
-  .my-auto.w-100
-    template(v-if="currentEndpoint && !addNewEndpoint")
-      .p-2(v-if="tableData?.percent")
-        AvoProgress(:percents="this.tableData.percent", :name="this.tableData.id || 'Team Performance'")
+  #app.container-md.px-0.d-flex
+    .my-auto.w-100
+      template(v-if='currentEndpoint && !addNewEndpoint')
+        .p-2(v-if='tableData.percent')
+          AvoProgress(
+            :percents='this.tableData.percent',
+            :name='this.tableData.id || "Team Performance"'
+          )
 
-      AvoTable(:table-data="tableData", v-if="tableData?.rows" :key="tableData.id")
+        AvoTable(:table-data='tableData' v-if='tableData.rows', :key='tableData.id')
 
-      .text-center 
-        a.btn.btn-link.text-secondary(href="#" 
-        :class="{'disabled': endpoint === currentEndpoint, 'loading': isLoading && endpoint === currentEndpoint }"
-        @click="currentEndpoint = endpoint", v-for="endpoint in endpoints" v-if="endpoints.length > 1") ●
-        a.btn.btn-link.text-secondary(href="#" @click="addNewEndpoint = true") +
+        .text-center
+          a.btn.btn-link.text-secondary(
+            href='#',
+            :class='{ disabled: endpoint === currentEndpoint, loading: isLoading && endpoint === currentEndpoint }'
+            @click='currentEndpoint = endpoint'
+            v-for='endpoint in endpoints'
+            v-if='endpoints.length > 1'
+          ) ●
+          a.btn.btn-link.text-secondary(href='#' @click='addNewEndpoint = true') +
 
-    template(v-else)
-      .form-floating.m-3(:class="{'shake': isEndpointError}")
-        input#currentEndpoint.form-control(type='text' placeholder='currentEndpoint' v-model="currentEndpoint")
-        label(for='currentEndpoint') Enter currentEndpoint
+      template(v-else)
+        .form-floating.m-3(:class='{ shake: isEndpointError }')
+          input#currentEndpoint.form-control(
+            type='text'
+            placeholder='currentEndpoint'
+            v-model='currentEndpoint'
+          )
+          label(for='currentEndpoint') Enter currentEndpoint
 
-AvoFooter(:legend="tableData.legend", v-if="tableData?.legend")
+  AvoFooter(:legend='tableData.legend' v-if='tableData.legend')
 </template>
 
 <script>
-import { getLocalStorage, setLocalStorage } from "./js/localstorage";
-import AvoFooter from "./components/AvoFooter.vue";
-import AvoTable from "./components/AvoTable.vue";
-import AvoProgress from "./components/AvoProgress.vue";
+import { getLocalStorage, setLocalStorage } from './js/localstorage';
+import normalizeTableDataPayload from './js/normalize-table-data-payload.js';
+import AvoFooter from './components/AvoFooter.vue';
+import AvoTable from './components/AvoTable.vue';
+import AvoProgress from './components/AvoProgress.vue';
 
-import { MAPPERS } from "./js/teams";
+import { MAPPERS } from './js/teams';
 
-import { reUrl } from "./js/regexp";
-import runSalute from "./js/salute.js";
-import showMagicImage from "./js/magicImage.js";
+import { reUrl } from './js/regexp';
+import runSalute from './js/salute.js';
+import showMagicImage from './js/magicImage.js';
 
 const PERCENT_THRESHOLDS = [
   {
     threshold: 105,
     run: showMagicImage,
-    imageUrl: "/Man Of Steel Superman Sticker.gif",
-    animation: "magicImageReveal",
+    imageUrl: '/Man Of Steel Superman Sticker.gif',
+    animation: 'magicImageReveal',
   },
   {
     threshold: 110,
     run: showMagicImage,
-    imageUrl: "/Loop Win Sticker by Dice Dreams.gif",
-    animation: "loopWinReveal",
+    imageUrl: '/Loop Win Sticker by Dice Dreams.gif',
+    animation: 'loopWinReveal',
   },
   { threshold: 120, run: runSalute },
 ];
@@ -52,9 +64,7 @@ const PERCENT_THRESHOLDS = [
 const byThresholdDesc = (a, b) => b.threshold - a.threshold;
 
 const getEntryForPercent = (percent) =>
-  [...PERCENT_THRESHOLDS]
-    .sort(byThresholdDesc)
-    .find((entry) => percent > entry.threshold);
+  [...PERCENT_THRESHOLDS].sort(byThresholdDesc).find((entry) => percent > entry.threshold);
 
 const runAnimationsForPercent = (percent) => {
   if (percent == null) return;
@@ -69,8 +79,8 @@ const runAnimationsForPercent = (percent) => {
 
 export default {
   data: () => ({
-    tableData: {},
-    currentEndpoint: "",
+    tableData: normalizeTableDataPayload(null),
+    currentEndpoint: '',
     endpoints: [],
     isEndpointError: false,
     addNewEndpoint: false,
@@ -94,33 +104,33 @@ export default {
 
       // Map the data using the imported mapper function
       const mapper = await importMapper(currentEndpoint);
-      this.tableData = mapper(data);
+      this.tableData = normalizeTableDataPayload(mapper(data));
 
       // Save the updated data to local storage
-      setLocalStorage("tableData", this.tableData);
+      setLocalStorage('tableData', this.tableData);
 
       // Save the current endpoint to local storage
-      setLocalStorage("currentEndpoint", currentEndpoint);
+      setLocalStorage('currentEndpoint', currentEndpoint);
 
       // Update the list of endpoints in local storage
-      this.endpoints = (await getLocalStorage("endpoints")) || [];
+      this.endpoints = (await getLocalStorage('endpoints')) || [];
 
       const index = this.endpoints.indexOf(currentEndpoint);
 
       index === -1 && this.endpoints.push(currentEndpoint);
 
-      setLocalStorage("endpoints", this.endpoints);
+      setLocalStorage('endpoints', this.endpoints);
 
       this.isLoading = false;
     },
   },
   async beforeMount() {
-    this.tableData = await getLocalStorage("tableData");
-    this.endpoints = (await getLocalStorage("endpoints")) || [];
-    this.currentEndpoint = (await getLocalStorage("currentEndpoint")) || "";
+    this.tableData = normalizeTableDataPayload(await getLocalStorage('tableData'));
+    this.endpoints = (await getLocalStorage('endpoints')) || [];
+    this.currentEndpoint = (await getLocalStorage('currentEndpoint')) || '';
   },
   async mounted() {
-    runAnimationsForPercent(this.tableData?.percent);
+    runAnimationsForPercent(this.tableData.percent);
     !!this.currentEndpoint && this.updateData();
   },
   watch: {
@@ -133,10 +143,10 @@ export default {
         setTimeout(() => {
           this.isEndpointError = false;
         }, 500);
-        this.currentEndpoint = "";
+        this.currentEndpoint = '';
       }
     },
-    "tableData.percent": {
+    'tableData.percent': {
       handler(percent) {
         runAnimationsForPercent(percent);
       },

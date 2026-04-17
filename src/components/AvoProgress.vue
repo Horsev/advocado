@@ -1,27 +1,27 @@
 <template lang="pug">
-.d-flex.mb-2
-  div Team Performance, {{ percents }}%
-  .ms-auto.me-1 {{ name }}
-.progress(
-  role='progressbar' 
-  aria-label='Success example' 
-  :aria-valuenow="`${percents}`" 
-  :title="`${percents >> 0}%`" 
-  style="height: 0.5rem"
-  aria-valuemin='0' 
-  :aria-valuemax='percents' 
+  .d-flex.mb-2
+    div Team Performance, {{ percents }}%
+    .ms-auto.me-1 {{ name }}
+  .progress(
+    role='progressbar'
+    aria-label='Success example',
+    :aria-valuenow='`${percents}`',
+    :title='`${percents >> 0}%`'
+    style='height: 0.5rem'
+    aria-valuemin='0',
+    :aria-valuemax='percents'
   ) 
-  .progress-bar(:style='`width: ${percents}%`' :class="getBgColor(percents)")
+    .progress-bar(:style='`width: ${percents}%`', :class='getBgColor(percents)')
 </template>
 
 <script>
-import { getColor } from "../js/utils";
+import { getColor } from '../js/utils';
 
 export default {
   props: {
     name: {
       type: String,
-      default: "Performance",
+      default: 'Performance',
     },
     percents: {
       type: Number,
@@ -33,7 +33,7 @@ export default {
     },
     colors: {
       type: Array,
-      default: ["danger", "warning", "primary", "success"],
+      default: ['danger', 'warning', 'primary', 'success'],
     },
   },
   methods: {

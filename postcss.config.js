@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
-import autoprefixer from "autoprefixer";
+import autoprefixer from 'autoprefixer';
 // eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
-import { purgeCSSPlugin } from "@fullhuman/postcss-purgecss";
+import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
 
-const IN_PRODUCTION = process.env.NODE_ENV === "production";
+const IN_PRODUCTION = process.env.NODE_ENV === 'production';
 
 const StyleBlocks = /<style[^]+?<\/style>/gi;
 const CSSSelectors = /[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g;
@@ -22,15 +22,15 @@ export default {
       purgeCSSPlugin({
         content: [anyHTMLFile, anyVUEFile],
         defaultExtractor(content) {
-          const contentWithoutStyleBlocks = content.replace(StyleBlocks, "");
+          const contentWithoutStyleBlocks = content.replace(StyleBlocks, '');
           return contentWithoutStyleBlocks.match(CSSSelectors) || [];
         },
         safelist: [
-          "html",
-          "body",
+          'html',
+          'body',
           /^bg-/,
           /^[data-bs-theme=dark]/,
-          ".version",
+          '.version',
           TransitionsClasses,
           CursorClasses,
           RouterLinkClasses,
