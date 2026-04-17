@@ -3,22 +3,31 @@
     div Team Performance, {{ completionPercent }}%
     .ms-auto.me-1 {{ name }}
   .progress(
-    role='progressbar'
-    :aria-label='getProgressBarAriaLabel(name, completionPercent)'
-    :aria-valuenow='getProgressBarAriaValueNow(completionPercent)'
+    role='progressbar',
+    :aria-label='getProgressBarAriaLabel(name, completionPercent)',
+    :aria-valuenow='getProgressBarAriaValueNow(completionPercent)',
     :title='getProgressBarTitle(completionPercent)'
     style='height: 0.5rem'
     aria-valuemin='0'
     aria-valuemax='100'
   )
     .progress-bar(
-      :style='getProgressBarWidthStyle(completionPercent)'
+      :style='getProgressBarWidthStyle(completionPercent)',
       :class='getProgressBarClassName(completionPercent, grades, colors)'
     )
 </template>
 
 <script>
 import { getColor } from '../js/utils';
+
+const GRADE_THRESHOLD_WARNING = 80;
+const GRADE_THRESHOLD_CAUTION = 90;
+const GRADE_THRESHOLD_FULL = 100;
+const DEFAULT_PROGRESS_GRADE_THRESHOLDS = [
+  GRADE_THRESHOLD_WARNING,
+  GRADE_THRESHOLD_CAUTION,
+  GRADE_THRESHOLD_FULL,
+];
 
 export default {
   props: {
@@ -32,7 +41,7 @@ export default {
     },
     grades: {
       type: Array,
-      default: () => [80, 90, 100],
+      default: () => [...DEFAULT_PROGRESS_GRADE_THRESHOLDS],
     },
     colors: {
       type: Array,

@@ -6,7 +6,8 @@ env:
 extends:
   - airbnb-base
   - plugin:vue/recommended
-  - prettier
+  # Last: turns off formatting rules that fight Prettier, disables arrow-body-style / prefer-arrow-callback vs prettier/prettier, enables prettier/prettier.
+  - plugin:prettier/recommended
 
 parser: vue-eslint-parser
 
@@ -15,9 +16,6 @@ parserOptions:
   sourceType: module
   parser: '@babel/eslint-parser'
   requireConfigFile: false
-
-plugins:
-  - prettier
 
 ignorePatterns:
   - node_modules/
@@ -53,7 +51,15 @@ rules:
 
   no-magic-numbers: ['error', { 'ignore': [0, 1, 2] }]
 
-  prettier/prettier: error
+  # Mirror .prettierrc.json so eslint-plugin-prettier matches CLI when the IDE worker does not resolve the config file.
+  prettier/prettier:
+    - error
+    - singleQuote: true
+      semi: true
+      trailingComma: all
+      endOfLine: lf
+      printWidth: 100
+      tabWidth: 2
 
 overrides:
   # Но для Node-серверных файлов — требуем .js
@@ -74,6 +80,3 @@ overrides:
       import/no-extraneous-dependencies:
         - error
         - devDependencies: true
-      prettier/prettier:
-        - error
-        - singleQuote: true

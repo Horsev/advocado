@@ -9,6 +9,14 @@ const CONFIG = {
   maxSize: 5,
   life: 100,
   initialExplosions: 3,
+  particleColorChannelLow: 100,
+  particleColorChannelHigh: 255,
+  particleGreenChannelLow: 55,
+  initialExplosionPositions: [
+    { widthFactor: 0.25, heightFactor: 0.5 },
+    { widthFactor: 0.5, heightFactor: 0.3 },
+    { widthFactor: 0.75, heightFactor: 0.6 },
+  ],
 };
 
 let width = 0;
@@ -27,7 +35,11 @@ const resizeCanvas = () => {
   canvas.height = height;
 };
 
-const getParticleColor = () => `255, ${randomInt(100, 255)}, ${randomInt(55, 255)}`;
+const getParticleColor = () =>
+  `255, ${randomInt(CONFIG.particleColorChannelLow, CONFIG.particleColorChannelHigh)}, ${randomInt(
+    CONFIG.particleGreenChannelLow,
+    CONFIG.particleColorChannelHigh,
+  )}`;
 
 class Particle {
   constructor({ x, y, vx, vy, size, color, life }) {
@@ -107,11 +119,12 @@ const runNextExplosion = () => {
 };
 
 const createInitialExplosionQueue = () => {
-  pendingExplosions = [
-    [width * 0.25, height * 0.5],
-    [width * 0.5, height * 0.3],
-    [width * 0.75, height * 0.6],
+  const buildExplosionCoordinate = ({ widthFactor, heightFactor }) => [
+    width * widthFactor,
+    height * heightFactor,
   ];
+
+  pendingExplosions = CONFIG.initialExplosionPositions.map(buildExplosionCoordinate);
 };
 
 const animate = () => {

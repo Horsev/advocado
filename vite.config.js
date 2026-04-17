@@ -1,37 +1,34 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { toTitleCase, log } from './src/js/utils';
 import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vite';
+// eslint-disable-next-line import/no-unresolved -- devDependency; resolved when Vite runs
+import vue from '@vitejs/plugin-vue';
+import { toTitleCase } from './src/js/utils.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const __filename = fileURLToPath(import.meta.url);
+const runtimeFilePath = fileURLToPath(import.meta.url);
 
-const __dirname = path.dirname(__filename);
+const projectRootDir = path.dirname(runtimeFilePath);
 
-const rootPath = path.resolve(__dirname, './');
+const rootPath = path.resolve(projectRootDir, './');
 
-const bootstrapPath = path.resolve(__dirname, 'node_modules/bootstrap');
+const bootstrapPath = path.resolve(projectRootDir, 'node_modules/bootstrap');
 
 const updateManifest = async () => {
-  // Resolve paths to manifest.json and package.json files
-  const manifestPath = path.resolve(__dirname, 'public/manifest.json');
-  const packagePath = path.resolve(__dirname, 'package.json');
+  const manifestPath = path.resolve(projectRootDir, 'public/manifest.json');
+  const packagePath = path.resolve(projectRootDir, 'package.json');
 
-  // Read package.json to get the application name and version
   const packageFile = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
 
-  // Log a message indicating which manifest is being updated
+  // eslint-disable-next-line no-console -- intentional build log
   console.log(`🚀 Update manifest ${packageFile.name} with version ${packageFile.version}\n`);
 
-  // Read manifest.json and modify the name and version properties
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   manifest.name = toTitleCase(packageFile.name);
   manifest.version = packageFile.version;
 
-  // Write the updated manifest.json file
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 };
 
@@ -44,8 +41,10 @@ const manifestPlugin = () => ({
   },
 });
 
+const isTruthyPlugin = (plugin) => Boolean(plugin);
+
 export default defineConfig({
-  plugins: [vue(), isProduction && manifestPlugin()].filter(Boolean),
+  plugins: [vue(), isProduction && manifestPlugin()].filter(isTruthyPlugin),
   root: rootPath,
   resolve: {
     alias: {

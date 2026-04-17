@@ -14,6 +14,7 @@ export default {
   props: {
     legend: {
       type: Array,
+      default: () => [],
     },
   },
 };

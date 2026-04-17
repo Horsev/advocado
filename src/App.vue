@@ -34,7 +34,7 @@
 
 <script>
 import { getLocalStorage, setLocalStorage } from './js/localstorage';
-import normalizeTableDataPayload from './js/normalize-table-data-payload.js';
+import normalizeTableDataPayload from './js/normalize-table-data-payload';
 import AvoFooter from './components/AvoFooter.vue';
 import AvoTable from './components/AvoTable.vue';
 import AvoProgress from './components/AvoProgress.vue';
@@ -42,8 +42,8 @@ import AvoProgress from './components/AvoProgress.vue';
 import { MAPPERS } from './js/teams';
 
 import { reUrl } from './js/regexp';
-import runSalute from './js/salute.js';
-import showMagicImage from './js/magicImage.js';
+import runSalute from './js/salute';
+import showMagicImage from './js/magicImage';
 
 const PERCENT_THRESHOLDS = [
   {
@@ -60,6 +60,9 @@ const PERCENT_THRESHOLDS = [
   },
   { threshold: 120, run: runSalute },
 ];
+
+const ENDPOINT_NOT_IN_LIST_INDEX = -1;
+const ENDPOINT_ERROR_SHAKE_RESET_MS = 500;
 
 const byThresholdDesc = (a, b) => b.threshold - a.threshold;
 
@@ -78,6 +81,11 @@ const runAnimationsForPercent = (percent) => {
 };
 
 export default {
+  components: {
+    AvoFooter,
+    AvoTable,
+    AvoProgress,
+  },
   data: () => ({
     tableData: normalizeTableDataPayload(null),
     currentEndpoint: '',
@@ -86,6 +94,36 @@ export default {
     addNewEndpoint: false,
     isLoading: false,
   }),
+  watch: {
+    currentEndpoint(to) {
+      if (reUrl.test(to)) {
+        this.addNewEndpoint = false;
+        this.updateData();
+      } else if (to) {
+        this.isEndpointError = true;
+        setTimeout(() => {
+          this.isEndpointError = false;
+        }, ENDPOINT_ERROR_SHAKE_RESET_MS);
+        this.currentEndpoint = '';
+      }
+    },
+    'tableData.percent': {
+      handler(percent) {
+        runAnimationsForPercent(percent);
+      },
+    },
+  },
+  async beforeMount() {
+    this.tableData = normalizeTableDataPayload(await getLocalStorage('tableData'));
+    this.endpoints = (await getLocalStorage('endpoints')) || [];
+    this.currentEndpoint = (await getLocalStorage('currentEndpoint')) || '';
+  },
+  async mounted() {
+    runAnimationsForPercent(this.tableData.percent);
+    if (this.currentEndpoint) {
+      this.updateData();
+    }
+  },
   methods: {
     async updateData() {
       const { currentEndpoint } = this;
@@ -117,45 +155,14 @@ export default {
 
       const index = this.endpoints.indexOf(currentEndpoint);
 
-      index === -1 && this.endpoints.push(currentEndpoint);
+      if (index === ENDPOINT_NOT_IN_LIST_INDEX) {
+        this.endpoints.push(currentEndpoint);
+      }
 
       setLocalStorage('endpoints', this.endpoints);
 
       this.isLoading = false;
     },
-  },
-  async beforeMount() {
-    this.tableData = normalizeTableDataPayload(await getLocalStorage('tableData'));
-    this.endpoints = (await getLocalStorage('endpoints')) || [];
-    this.currentEndpoint = (await getLocalStorage('currentEndpoint')) || '';
-  },
-  async mounted() {
-    runAnimationsForPercent(this.tableData.percent);
-    !!this.currentEndpoint && this.updateData();
-  },
-  watch: {
-    currentEndpoint(to) {
-      if (reUrl.test(to)) {
-        this.addNewEndpoint = false;
-        this.updateData();
-      } else if (to) {
-        this.isEndpointError = true;
-        setTimeout(() => {
-          this.isEndpointError = false;
-        }, 500);
-        this.currentEndpoint = '';
-      }
-    },
-    'tableData.percent': {
-      handler(percent) {
-        runAnimationsForPercent(percent);
-      },
-    },
-  },
-  components: {
-    AvoFooter,
-    AvoTable,
-    AvoProgress,
   },
 };
 </script>

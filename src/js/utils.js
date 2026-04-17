@@ -13,8 +13,10 @@ const capitalizeWordForTitleCase = (word) => {
   return `${firstCharacter.toUpperCase()}${remainingCharacters.join('').toLowerCase()}`;
 };
 
-export const toTitleCase = (phrase) =>
-  phrase.split(' ').filter(isNonEmptyWord).map(capitalizeWordForTitleCase).join(' ');
+export const toTitleCase = (phrase) => {
+  const words = phrase.split(' ').filter(isNonEmptyWord);
+  return words.map(capitalizeWordForTitleCase).join(' ');
+};
 
 export const getColor = (grades, colors) => (percent) => {
   const defaultColor = colors[0];
@@ -25,14 +27,19 @@ export const getColor = (grades, colors) => (percent) => {
   );
 };
 
+const COMPARE_SORT_LESS = -1;
+const COMPARE_SORT_GREATER = 1;
+
 export const sortByKey = (key) => (a, b) => {
   if (a[key] === b[key]) return 0;
-  return a[key] > b[key] ? -1 : 1;
+  return a[key] > b[key] ? COMPARE_SORT_LESS : COMPARE_SORT_GREATER;
 };
 
 export const sumByKey = (key) => (acc, val) => acc + val[key];
 
-export const randomizer = () => Math.random() - 0.5;
+const RANDOMIZER_CENTER = 0.5;
+
+export const randomizer = () => Math.random() - RANDOMIZER_CENTER;
 
 export const toUKCurrency = (amount) =>
   amount.toLocaleString('uk', {

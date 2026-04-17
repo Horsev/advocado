@@ -42,16 +42,25 @@
 <script>
 import { toUKCurrency, getColor } from '../js/utils';
 
+const TABLE_GRADE_RANGE_MIN = -19;
+const TABLE_GRADE_RANGE_MAX = 19;
+const DEFAULT_TABLE_GRADES = [TABLE_GRADE_RANGE_MIN, TABLE_GRADE_RANGE_MAX];
+const DEFAULT_TABLE_COLOR_NAMES = ['danger', 'info', 'success'];
+const PERSONAL_PLAN_COMPLETE_PERCENT = 100;
+
 export default {
   props: {
-    tableData: Object,
+    tableData: {
+      type: Object,
+      default: () => ({}),
+    },
     grades: {
       type: Array,
-      default: [-19, 19],
+      default: () => [...DEFAULT_TABLE_GRADES],
     },
     colors: {
       type: Array,
-      default: ['danger', 'info', 'success'],
+      default: () => [...DEFAULT_TABLE_COLOR_NAMES],
     },
   },
   methods: {
@@ -69,7 +78,7 @@ export default {
       return cell.type === 'avatar' ? 'width: 1%' : undefined;
     },
     getPersonalPlanCompletionBadgeClass(percent) {
-      return percent < 100 ? 'bg-danger' : 'bg-success';
+      return percent < PERSONAL_PLAN_COMPLETE_PERCENT ? 'bg-danger' : 'bg-success';
     },
     formatCurrencyCellValue(amount) {
       if (amount == null || amount === '') return '';

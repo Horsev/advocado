@@ -1,3 +1,5 @@
+const RATIO_TO_PERCENT = 100;
+
 const getCountOfDaysInMonth = (calendarYear, zeroBasedMonthIndex) =>
   new Date(calendarYear, zeroBasedMonthIndex + 1, 0).getDate();
 
@@ -35,5 +37,5 @@ export const getPersonalPlanCompletionPercent = ({
   const revenue =
     amountSuccessDeals === undefined || amountSuccessDeals === null ? 0 : amountSuccessDeals;
 
-  return (revenue / proratedPersonalTarget) * 100;
+  return (revenue / proratedPersonalTarget) * RATIO_TO_PERCENT;
 };

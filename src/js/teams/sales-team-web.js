@@ -6,6 +6,8 @@ import {
 
 // in red, beige and black, fascism, 3 Reich, halftone, comix, world war 2
 
+const REVENUE_PLAN_TO_PERCENT = 100;
+
 const SALES_PLAN_PER_SELLER = 203885;
 
 const config = {
@@ -23,7 +25,7 @@ const config = {
     {
       icon: '🐄',
       title: 'Cash Cow',
-      description: `Maximum average deals amount for the last 30 days`,
+      description: 'Maximum average deals amount for the last 30 days',
     },
     {
       icon: '🌱',
@@ -46,11 +48,15 @@ const config = {
 
 const { id, avatars, legend, th } = config;
 
-const getSalesAchievementEmojis = (idx, managers) => {
-  const highFiver = [...managers].sort(sortByKey('successDeals'))[0].name === managers[idx].name;
+const isTopManagerBySortField = (managers, managerIndex, sortField) => {
+  const rankedManagers = [...managers].sort(sortByKey(sortField));
+  const topManagerName = rankedManagers[0].name;
+  return topManagerName === managers[managerIndex].name;
+};
 
-  const cashCow =
-    [...managers].sort(sortByKey('averageAmountSuccessDeals'))[0].name === managers[idx].name;
+const getSalesAchievementEmojis = (idx, managers) => {
+  const highFiver = isTopManagerBySortField(managers, idx, 'successDeals');
+  const cashCow = isTopManagerBySortField(managers, idx, 'averageAmountSuccessDeals');
 
   const growthHacker =
     managers
@@ -131,7 +137,7 @@ const getPerformance = (managers, referenceDate) => {
     return 0;
   }
 
-  return Math.round((revenueBySuccessDeals / currentRevenuePlan) * 100);
+  return Math.round((revenueBySuccessDeals / currentRevenuePlan) * REVENUE_PLAN_TO_PERCENT);
 };
 
 export const mapper = ({ managers }) => {

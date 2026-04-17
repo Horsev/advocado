@@ -1,5 +1,8 @@
 import { keysEmojiToString, sortByKey, sumByKey } from './utils';
 
+const STAR_PLAYER_RESULT_THRESHOLD_PERCENT = 20;
+const PERFORMANCE_TO_PERCENT = 100;
+
 const totalSP = (data) => data.reduce(sumByKey('last30SP'), 0);
 
 export const getLegend = (sp) => [
@@ -30,7 +33,7 @@ export const getAchievements = (idx, managers, sp) => {
 
   const highPerformer = managers[idx].last30SP > sp;
 
-  const starPlayer = managers[idx].result > 20;
+  const starPlayer = managers[idx].result > STAR_PLAYER_RESULT_THRESHOLD_PERCENT;
 
   return keysEmojiToString({
     '🏆': сhampion,
@@ -39,7 +42,8 @@ export const getAchievements = (idx, managers, sp) => {
   });
 };
 
-export const getPerformance = (data, sp) => (totalSP(data) / (sp * data.length)) * 100;
+export const getPerformance = (data, sp) =>
+  (totalSP(data) / (sp * data.length)) * PERFORMANCE_TO_PERCENT;
 
 const parser =
   (names, sp) =>

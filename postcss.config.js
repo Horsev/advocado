@@ -10,8 +10,8 @@ const CursorClasses = /^(?!(|.*?:)cursor-move).+-move$/;
 const RouterLinkClasses = /^router-link(|-exact)-active$/;
 const ScopedClasses = /data-v-.*/;
 
-const anyHTMLFile = `./public/**/*.html`;
-const anyVUEFile = `./src/**/*.vue`;
+const anyHTMLFile = './public/**/*.html';
+const anyVUEFile = './src/**/*.vue';
 
 export default {
   plugins: [
