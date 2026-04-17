@@ -5,11 +5,16 @@ export const log = (data) => {
   console.log('🥑 Advocado:', data);
 };
 
-export const toTitleCase = (string) =>
-  string
-    .split(' ')
-    .map(([first, ...rest]) => `${first.toUpperCase()}${rest.join('').toLowerCase()}`)
-    .join(' ');
+const isNonEmptyWord = (word) => word.length > 0;
+
+const capitalizeWordForTitleCase = (word) => {
+  if (word.length === 0) return '';
+  const [firstCharacter, ...remainingCharacters] = word;
+  return `${firstCharacter.toUpperCase()}${remainingCharacters.join('').toLowerCase()}`;
+};
+
+export const toTitleCase = (phrase) =>
+  phrase.split(' ').filter(isNonEmptyWord).map(capitalizeWordForTitleCase).join(' ');
 
 export const getColor = (grades, colors) => (percent) => {
   const defaultColor = colors[0];
@@ -20,7 +25,10 @@ export const getColor = (grades, colors) => (percent) => {
   );
 };
 
-export const sortByKey = (key) => (a, b) => (a[key] > b[key] ? -1 : 1);
+export const sortByKey = (key) => (a, b) => {
+  if (a[key] === b[key]) return 0;
+  return a[key] > b[key] ? -1 : 1;
+};
 
 export const sumByKey = (key) => (acc, val) => acc + val[key];
 
