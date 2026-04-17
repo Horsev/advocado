@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
 import autoprefixer from 'autoprefixer';
-// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-import
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 
 const IN_PRODUCTION = process.env.NODE_ENV === 'production';
 

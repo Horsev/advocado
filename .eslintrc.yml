@@ -67,11 +67,13 @@ overrides:
         - error
         - ignorePackages
         - js: always
+  # Root PostCSS/Vite configs legitimately import devDependencies (not in airbnb’s default glob list).
   - files:
-      - 'specs/**/*'
-    extends:
-      - plugin:jest/recommended
-    plugins:
-      - jest
-    env:
-      jest/globals: true
+      - '*.config.js'
+    rules:
+      import/no-extraneous-dependencies:
+        - error
+        - devDependencies: true
+      prettier/prettier:
+        - error
+        - singleQuote: true
