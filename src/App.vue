@@ -81,11 +81,13 @@ export default {
       }
     },
     'tableData.percent': {
-      handler: 'onTableDataPercentChanged',
+      handler: runPercentThresholdAnimations,
     },
   },
   async beforeMount() {
-    this.tableData = normalizeTableDataPayload(await getLocalStorage('tableData'));
+    this.tableData = normalizeTableDataPayload(
+      await getLocalStorage('tableData'),
+    );
     this.endpoints = (await getLocalStorage('endpoints')) || [];
     this.currentEndpoint = (await getLocalStorage('currentEndpoint')) || '';
   },
@@ -114,9 +116,6 @@ export default {
         loading: isFetching && tabEndpoint === activeEndpoint,
       };
     },
-    onTableDataPercentChanged(percent) {
-      runPercentThresholdAnimations(percent);
-    },
     async loadTeamMapper(endpoint) {
       const { mapper } = await import(`./js/teams/${MAPPERS[endpoint]}.js`);
       return mapper;
@@ -142,8 +141,11 @@ export default {
       this.isLoading = true;
       try {
         const mapTeamPayload = await this.loadTeamMapper(nextCurrentEndpoint);
-        const rawEndpointPayload = await this.fetchEndpointPayloadJson(nextCurrentEndpoint);
-        this.tableData = normalizeTableDataPayload(mapTeamPayload(rawEndpointPayload));
+        const rawEndpointPayload =
+          await this.fetchEndpointPayloadJson(nextCurrentEndpoint);
+        this.tableData = normalizeTableDataPayload(
+          mapTeamPayload(rawEndpointPayload),
+        );
         this.persistSnapshotAfterUpdate(nextCurrentEndpoint);
         await this.mergePersistedEndpoints(nextCurrentEndpoint);
       } finally {

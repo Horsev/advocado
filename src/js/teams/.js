@@ -42,10 +42,13 @@ const config = {
 const { id, avatars, legend, th } = config;
 
 const getSalesAchievementEmojis = (idx, managers) => {
-  const highFiver = [...managers].sort(sortByKey('successDeals'))[0].name === managers[idx].name;
+  const highFiver =
+    [...managers].sort(sortByKey('successDeals'))[0].name ===
+    managers[idx].name;
 
   const cashCow =
-    [...managers].sort(sortByKey('averageAmountSuccessDeals'))[0].name === managers[idx].name;
+    [...managers].sort(sortByKey('averageAmountSuccessDeals'))[0].name ===
+    managers[idx].name;
 
   const growthHacker =
     managers
@@ -111,20 +114,24 @@ const getPerformance = (managers) => {
 
   const teamSalesRevenuePlan = salesPlan * numberOfSellers;
 
-  const numDays = (yearNow, monthNow) => new Date(yearNow, monthNow, 0).getDate();
+  const numDays = (yearNow, monthNow) =>
+    new Date(yearNow, monthNow, 0).getDate();
 
   const [yearNow, monthNow] = [dateNow.getYear(), dateNow.getMonth()];
 
   const numOfDaysInCurrentMounth = numDays(yearNow, monthNow);
 
-  const currentRevenuePlan = (teamSalesRevenuePlan / numOfDaysInCurrentMounth) * dayOfTheMounth;
+  const currentRevenuePlan =
+    (teamSalesRevenuePlan / numOfDaysInCurrentMounth) * dayOfTheMounth;
 
   const revenueBySuccessDeals = managers.reduce(
     (acc, { amountSuccessDeals }) => acc + amountSuccessDeals,
     0,
   );
 
-  const teamPerformance = Math.round((revenueBySuccessDeals / currentRevenuePlan) * 100);
+  const teamPerformance = Math.round(
+    (revenueBySuccessDeals / currentRevenuePlan) * 100,
+  );
 
   return teamPerformance;
 };

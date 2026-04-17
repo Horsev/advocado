@@ -22,7 +22,7 @@
               )
               img.avatar-blank(src='/i/alien.svg' alt='Alien' v-else)
               .text-center
-                span.badge.personal-plan-completion(
+                span.badge.user-select-none.personal-plan-completion(
                   v-if='cell.personalPlanCompletionPercent',
                   :class='getPersonalPlanCompletionBadgeClass(cell.personalPlanCompletionPercent)'
                 ) {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
@@ -71,14 +71,17 @@ export default {
       return '';
     },
     getNumericCellAlignmentClass(cell) {
-      const isNumericAligned = cell.type === 'percent' || cell.type === 'currency';
+      const isNumericAligned =
+        cell.type === 'percent' || cell.type === 'currency';
       return { 'text-end': isNumericAligned };
     },
     getAvatarColumnStyle(cell) {
       return cell.type === 'avatar' ? 'width: 1%' : undefined;
     },
     getPersonalPlanCompletionBadgeClass(percent) {
-      return percent < PERSONAL_PLAN_COMPLETE_PERCENT ? 'bg-danger' : 'bg-success';
+      return percent < PERSONAL_PLAN_COMPLETE_PERCENT
+        ? 'bg-danger'
+        : 'bg-success';
     },
     formatCurrencyCellValue(amount) {
       if (amount == null || amount === '') return '';
@@ -100,10 +103,6 @@ export default {
 </script>
 
 <style scoped lang="sass">
-.flip-move
-  transition: transform 0.25s
-  transition-timing-function: cubic-bezier(0.52, 0.1, 0.65, 0.93)
-
 table
   &.table
     th
@@ -118,6 +117,10 @@ table
   font-size: 0.5rem
   position: relative
   top: -1rem
+  transition: transform 0.25s
+  transition-timing-function: ease-in-out
+  &:hover
+    transform: scale(1.5)
 
 .avatar
   width: 3rem

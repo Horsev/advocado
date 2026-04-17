@@ -29,11 +29,13 @@ export const getLegend = (sp) => [
 ];
 
 export const getAchievements = (idx, managers, sp) => {
-  const сhampion = managers.sort(sortByKey('last30SP'))[0].name === managers[idx].name;
+  const сhampion =
+    managers.sort(sortByKey('last30SP'))[0].name === managers[idx].name;
 
   const highPerformer = managers[idx].last30SP > sp;
 
-  const starPlayer = managers[idx].result > STAR_PLAYER_RESULT_THRESHOLD_PERCENT;
+  const starPlayer =
+    managers[idx].result > STAR_PLAYER_RESULT_THRESHOLD_PERCENT;
 
   return keysEmojiToString({
     '🏆': сhampion,
@@ -65,6 +67,7 @@ const parser =
     },
   ];
 
-export const getRows = (data, names, sp) => data.sort(sortByKey('last30SP')).map(parser(names, sp));
+export const getRows = (data, names, sp) =>
+  data.sort(sortByKey('last30SP')).map(parser(names, sp));
 
 export default { getLegend, getPerformance, getRows };

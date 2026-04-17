@@ -56,7 +56,11 @@ const isTopManagerBySortField = (managers, managerIndex, sortField) => {
 
 const getSalesAchievementEmojis = (idx, managers) => {
   const highFiver = isTopManagerBySortField(managers, idx, 'successDeals');
-  const cashCow = isTopManagerBySortField(managers, idx, 'averageAmountSuccessDeals');
+  const cashCow = isTopManagerBySortField(
+    managers,
+    idx,
+    'averageAmountSuccessDeals',
+  );
 
   const growthHacker =
     managers
@@ -137,13 +141,16 @@ const getPerformance = (managers, referenceDate) => {
     return 0;
   }
 
-  return Math.round((revenueBySuccessDeals / currentRevenuePlan) * REVENUE_PLAN_TO_PERCENT);
+  return Math.round(
+    (revenueBySuccessDeals / currentRevenuePlan) * REVENUE_PLAN_TO_PERCENT,
+  );
 };
 
 export const mapper = ({ managers }) => {
   const referenceDate = new Date();
 
-  const parseRow = (manager, idx) => parser(manager, idx, managers, referenceDate);
+  const parseRow = (manager, idx) =>
+    parser(manager, idx, managers, referenceDate);
 
   return {
     id,

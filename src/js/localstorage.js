@@ -10,6 +10,7 @@ async function getLocalStorage(key) {
   return data;
 }
 
-const setLocalStorage = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+const setLocalStorage = (key, value) =>
+  localStorage.setItem(key, JSON.stringify(value));
 
 export { getLocalStorage, setLocalStorage };

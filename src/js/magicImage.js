@@ -11,7 +11,10 @@ const setImageSrc = (el, imageUrl) => {
   if (img && imageUrl) img.src = imageUrl;
 };
 
-export default function showMagicImage(imageUrl, animationName = DEFAULT_ANIMATION) {
+export default function showMagicImage(
+  imageUrl,
+  animationName = DEFAULT_ANIMATION,
+) {
   const today = getTodayKey();
   if (localStorage.getItem(MAGIC_IMAGE_STORAGE_KEY) === today) return;
   if (shown) return;

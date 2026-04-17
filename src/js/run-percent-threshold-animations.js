@@ -17,11 +17,15 @@ const PERCENT_THRESHOLDS = [
   { threshold: 120, run: runSalute },
 ];
 
-const sortThresholdEntriesDesc = (left, right) => right.threshold - left.threshold;
+const sortThresholdEntriesDesc = (left, right) =>
+  right.threshold - left.threshold;
 
 const findThresholdEntryForPercent = (percent) => {
-  const isAboveEntryThreshold = (thresholdEntry) => percent > thresholdEntry.threshold;
-  return [...PERCENT_THRESHOLDS].sort(sortThresholdEntriesDesc).find(isAboveEntryThreshold);
+  const isAboveEntryThreshold = (thresholdEntry) =>
+    percent > thresholdEntry.threshold;
+  return [...PERCENT_THRESHOLDS]
+    .sort(sortThresholdEntriesDesc)
+    .find(isAboveEntryThreshold);
 };
 
 const runPercentThresholdAnimations = (percent) => {
