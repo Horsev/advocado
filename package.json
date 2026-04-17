@@ -34,7 +34,7 @@
     "pug": "^3.0.2",
     "purgecss": "^8.0.0",
     "sass": "~1.77.6",
-    "vite": "^6.4.2",
+    "vite": "^8.0.0",
     "vue-pug-plugin": "^2.0.3"
   },
   "description": "Teamwork extension for Chrome",
