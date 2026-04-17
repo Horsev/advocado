@@ -20,6 +20,10 @@ npm run dev
 
 ## Changelog
 
+### [0.4.1] - 2026-03-18
+
+- Show **personal performance** on sales avatars: prorated plan target vs closed revenue, badge on the avatar (green at 100%, red below)
+
 ### [0.4.0] - 2026-03-18
 
 - Add magic image celebrations at 105% and 110% team performance (GIF overlays)
