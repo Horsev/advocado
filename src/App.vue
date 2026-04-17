@@ -4,7 +4,7 @@
       template(v-if='currentEndpoint && !addNewEndpoint')
         .p-2(v-if='tableData.percent')
           AvoProgress(
-            :percents='this.tableData.percent',
+            :completion-percent='this.tableData.percent',
             :name='this.tableData.id || "Team Performance"'
           )
 

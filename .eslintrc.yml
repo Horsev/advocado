@@ -1,0 +1,77 @@
+env:
+  browser: true
+  es2022: true
+  node: true
+
+extends:
+  - airbnb-base
+  - plugin:vue/recommended
+  - prettier
+
+parser: vue-eslint-parser
+
+parserOptions:
+  ecmaVersion: 2022
+  sourceType: module
+  parser: '@babel/eslint-parser'
+  requireConfigFile: false
+
+plugins:
+  - prettier
+
+ignorePatterns:
+  - node_modules/
+  - dist/
+  - build/
+  - coverage/
+  - '*.min.js'
+  - prisma/db/
+  - uploads/
+
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - .js
+        - .vue
+
+rules:
+  # Мы можем импортить файлы .../.../...../
+  import/no-relative-packages: off
+  # Все импорты именнованные
+  import/prefer-default-export: off
+  # По умолчанию для фронта можно без расширений
+  import/extensions:
+    - error
+    - ignorePackages
+    - js: never
+      vue: always
+  # иногда нужно указать все аргументы
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: '^_'
+
+  no-magic-numbers: ['error', { 'ignore': [0, 1, 2] }]
+
+  prettier/prettier: error
+
+overrides:
+  # Но для Node-серверных файлов — требуем .js
+  - files:
+      - 'server/**/*.js'
+      - 'scripts/**/*.js'
+      - 'specs/**/*.js'
+      - '*.config.js'
+    rules:
+      import/extensions:
+        - error
+        - ignorePackages
+        - js: always
+  - files:
+      - 'specs/**/*'
+    extends:
+      - plugin:jest/recommended
+    plugins:
+      - jest
+    env:
+      jest/globals: true

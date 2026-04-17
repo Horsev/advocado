@@ -1,17 +1,20 @@
 <template lang="pug">
   .d-flex.mb-2
-    div Team Performance, {{ percents }}%
+    div Team Performance, {{ completionPercent }}%
     .ms-auto.me-1 {{ name }}
   .progress(
     role='progressbar'
-    aria-label='Success example',
-    :aria-valuenow='`${percents}`',
-    :title='`${percents >> 0}%`'
+    :aria-label='getProgressBarAriaLabel(name, completionPercent)'
+    :aria-valuenow='getProgressBarAriaValueNow(completionPercent)'
+    :title='getProgressBarTitle(completionPercent)'
     style='height: 0.5rem'
-    aria-valuemin='0',
-    :aria-valuemax='percents'
-  ) 
-    .progress-bar(:style='`width: ${percents}%`', :class='getBgColor(percents)')
+    aria-valuemin='0'
+    aria-valuemax='100'
+  )
+    .progress-bar(
+      :style='getProgressBarWidthStyle(completionPercent)'
+      :class='getProgressBarClassName(completionPercent, grades, colors)'
+    )
 </template>
 
 <script>
@@ -23,23 +26,34 @@ export default {
       type: String,
       default: 'Performance',
     },
-    percents: {
+    completionPercent: {
       type: Number,
       default: 0,
     },
     grades: {
       type: Array,
-      default: [80, 90, 100],
+      default: () => [80, 90, 100],
     },
     colors: {
       type: Array,
-      default: ['danger', 'warning', 'primary', 'success'],
+      default: () => ['danger', 'warning', 'primary', 'success'],
     },
   },
   methods: {
-    getBgColor(percents) {
-      const { grades, colors } = this;
-      return `bg-${getColor(grades, colors)(percents)}`;
+    getProgressBarAriaLabel(teamDisplayName, completionPercent) {
+      return `Team performance, ${Math.trunc(completionPercent)} percent. ${teamDisplayName}.`;
+    },
+    getProgressBarAriaValueNow(completionPercent) {
+      return Math.trunc(completionPercent);
+    },
+    getProgressBarClassName(completionPercent, gradeThresholds, colorNames) {
+      return `bg-${getColor(gradeThresholds, colorNames)(completionPercent)}`;
+    },
+    getProgressBarTitle(completionPercent) {
+      return `${Math.trunc(completionPercent)}%`;
+    },
+    getProgressBarWidthStyle(completionPercent) {
+      return { width: `${completionPercent}%` };
     },
   },
 };

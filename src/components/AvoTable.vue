@@ -21,10 +21,11 @@
                 v-if='tableData.avatars[cell.name]'
               )
               img.avatar-blank(src='/i/alien.svg' alt='Alien' v-else)
-              span.badge.personal-plan-completion(
-                v-if='cell.personalPlanCompletionPercent',
-                :class='getPersonalPlanCompletionBadgeClass(cell.personalPlanCompletionPercent)'
-              ) {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
+              .text-center
+                span.badge.personal-plan-completion(
+                  v-if='cell.personalPlanCompletionPercent',
+                  :class='getPersonalPlanCompletionBadgeClass(cell.personalPlanCompletionPercent)'
+                ) {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
 
             template(v-else-if='cell.type === "name"')
               span {{ cell.name }}
@@ -107,10 +108,7 @@ table
 .personal-plan-completion
   font-size: 0.5rem
   position: relative
-  top: -0.5rem
-  display: flex
-  justify-content: center
-  align-items: center
+  top: -1rem
 
 .avatar
   width: 3rem
