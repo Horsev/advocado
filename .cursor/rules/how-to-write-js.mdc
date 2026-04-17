@@ -1,0 +1,161 @@
+---
+description: Rules JS code
+globs: '**/*.{js,vue}'
+alwaysApply: true
+---
+
+# Functional Style Preference
+
+Use of:
+
+- map
+- reduce
+- small stateless helpers
+
+Instead of:
+
+- mutable loops
+- inline transformations
+
+# Boundary-Oriented Architecture
+
+- Edge (HTTP): req.query
+- Core (logic): pure helpers
+- Infra (DB): db.\*
+
+Clear separation of concerns.
+
+# Naming as Documentation
+
+Names describe intent, not implementation:
+
+- getPaginationParams (not calcStuff)
+- createPaginationQuery (not buildQ)
+- buildGroupNamesByUser
+- Always assign names to Regexp patterns
+
+This reduces need for comments.
+
+# Single Responsibility Principle (SRP)
+
+Each function does one well-defined thing.
+
+# Deterministic, Pure Functions
+
+Where possible, functions are pure (no side effects, same input → same output).
+
+This makes logic:
+
+- testable in isolation
+- reusable across handlers
+
+# Input Normalization at Boundaries
+
+All unsafe external input (req.query) is normalized immediately.
+
+```javascript
+parsePositiveInt(query.page, 1);
+```
+
+Instead of letting invalid values propagate, you:
+
+- sanitize once
+- operate on trusted values afterwards
+
+# Eliminate Duplicate Logic / Derived State
+
+# Explicit Domain Concepts
+
+Instead of inline math:
+
+```javascript
+const offset = (safePage - 1) * perPage;
+```
+
+You encapsulate the concept:
+
+```javascript
+getPaginationParams(...)
+```
+
+This makes pagination a first-class domain operation, not scattered arithmetic.
+
+# Remove Inline Complexity (Decomposition)
+
+Before
+
+```javascript
+Math.min(MAX_PER_PAGE, Math.max(1, parseInt(...)))
+```
+
+After
+
+```javascript
+const perPage = clamp(requestedPerPage, 1, MAX_PER_PAGE);
+```
+
+This improves:
+
+- readability
+- debuggability
+- error isolation
+
+# Data Transformation Isolation
+
+his block:
+
+```javascript
+for (const u of users) {
+  ...
+}
+```
+
+became:
+
+```javascript
+buildGroupNamesByUser(users);
+```
+
+Why:
+
+- separates data fetching from data shaping
+- enables replacement (e.g., bulk DB query later)
+
+# Encapsulation of Side Effects
+
+# Stable Output Contract
+
+Returned object shape is preserved, but now values are:
+
+- consistently computed
+- easier to reason about
+
+# Delete code and UI you don’t need
+
+# Callback Functions
+
+Always extract callback functions passed to array methods (`.forEach`, `.map`, `.filter`, `.find`, `.reduce`, `.some`, `.every`, etc.) into a named `const` before passing them.
+
+Always extract callback functions passed to document methods (addEventListener, etc) into a named `const` before passing them.
+
+Use arrow notaion.
+
+```javascript
+// BAD — anonymous inline callback
+this.IBANForm.forEach((field) => {
+  field.value = '';
+});
+
+const field = this.IBANForm.find((f) => f.name === fieldName);
+
+// GOOD — named const callback
+const resetValue = (field) => {
+  field.value = '';
+};
+this.IBANForm.forEach(resetValue);
+
+const isMatchingField = (f) => f.name === fieldName;
+const field = this.IBANForm.find(isMatchingField);
+```
+
+This applies to all higher-order function calls, not just array methods — e.g. `setTimeout`, `$watch`, `Promise.then`, etc.

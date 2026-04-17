@@ -1,0 +1,204 @@
+---
+description: 'Vue Options API code style: data flow lifecycle, separation of concerns, component abstraction'
+alwaysApply: false
+---
+
+# Vue Options API — Core Principles
+
+**Official Vue 3 docs via Context7:** use MCP `query-docs` with library ID `/vuejs/docs` ([vuejs/docs on Context7](https://context7.com/vuejs/docs)). Scope questions to the **Options API**. See `docs/VUE_CONTEXT7.md` in the repo for the full note.
+
+---
+
+## Data Flow Lifecycle
+
+Data is always fetched **before** the component renders. Follow this order strictly:
+
+1. **`asyncData` / server prefetch** — fetch data that must exist on load (SSR or route-level)
+2. **`created`** — fetch data that can start immediately (no DOM needed)
+3. **`mounted`** — only if DOM or browser APIs are required
+
+Never fetch inside methods unless triggered by a user action (button click, form submit, etc.).
+
+```js
+// ✅ data fetched in created — available before first render
+created() {
+  this.loadPageData();
+},
+methods: {
+  loadPageData() {
+    Promise.all([this.fetchUsers(), this.fetchStats()]).then(this.applyPageData);
+  },
+}
+```
+
+---
+
+## Separation of Concerns in Methods
+
+Each method does **one thing**. Split by responsibility, not by convenience.
+
+**Two API calls = two fetch methods:**
+
+```js
+methods: {
+  async fetchUsers() { ... },
+  async fetchStats() { ... },
+}
+```
+
+**Mapping a structure for display = a separate transform method:**
+
+```js
+// ✅ receives raw data, returns display-ready structure
+getTableRows(rawData) { ... },
+getCards(rawData) { ... },
+```
+
+**Helpers used only inside one method = local `const` inside that method:**
+
+```js
+getTableRows(rawData) {
+  const toLabel = (item) => item.name || item.id;
+  const toRow = (item, i) => ({ index: i + 1, label: toLabel(item) });
+  return rawData.map(toRow);
+},
+```
+
+**Helpers reused across methods = extract as a component method, call via `this`:**
+
+```js
+formatCurrency(n) {
+  return `${n.toFixed(2)} ₴`;
+},
+getTableRows(rawData) {
+  const toRow = (item) => ({ price: this.formatCurrency(item.price) });
+  return rawData.map(toRow);
+},
+```
+
+---
+
+## What Lives Between `<script>` and `export default`
+
+Only **imports** and **constants**. No function declarations. No logic.
+
+```js
+// ✅ allowed
+import { formatDate } from '@908inc/core';
+
+const API_USERS = '/api/users';
+const EMPTY_STATE = { users: [], total: 0 };
+const TABLE_FIELDS = [
+  { key: 'name', label: 'Імʼя' },
+  { key: 'date', label: 'Дата' },
+];
+```
+
+**Imported functions are used directly — no wrapper methods needed:**
+
+```js
+// ✅ use imported function directly inside a method
+getTableRows(rawData) {
+  const toRow = (item) => ({ date: formatDate(item.createdAt) });
+  return rawData.map(toRow);
+},
+```
+
+**If an imported function is called from template, expose it as a method:**
+
+```js
+// template calls: {{ formatDate(row.date) }}
+methods: {
+  formatDate,  // ✅ re-export as method for template access
+}
+```
+
+---
+
+## Template Calls Methods — Methods Do the Work
+
+Template renders results. JavaScript computes them.
+
+```pug
+//- ✅ template calls method with raw data, gets ready-to-render result
+OdbTable(:items='getTableRows(rawUsers)')
+
+v-for= 'card in getCards(rawCars)'
+  Cards(:item='card')
+```
+
+- No expressions inside template (no `.filter()`, `.map()`, ternaries for display logic)
+- All method parameters come **from the outside** — passed as arguments, never read from `this` inside the method body
+- `this` inside methods is only for calling other methods or accessing reactive `data`
+
+---
+
+## No `computed` Unless Explicitly Needed
+
+Default to `methods`. Use `computed` only when reactivity to multiple sources is genuinely required — and only when asked or clearly necessary.
+
+```js
+// ❌ computed for a simple transform
+computed: {
+  formattedTitle() { return this.title.toUpperCase(); }
+}
+
+// ✅ method instead
+formatTitle(title) { return title.toUpperCase(); }
+```
+
+**Exception — multi-step wizards:** Dense flows (e.g. IBAN → bank → credentials) may keep **chained `computed`** properties for derived step state, bank key, progress, and gating flags so each piece stays a named concept and templates stay thin. Prefer **methods** for anything invoked explicitly from the template with arguments (IDs, labels, keys). This does not override the **Template Calls Methods** rule for string concat and display ternaries in Pug.
+
+---
+
+## Pages vs Components
+
+**Pages** know the context. They own the lifecycle, fetch raw data, and map it to abstract shapes.
+
+**Components** are isolated. They render abstract fields — `title`, `subtitle`, `description`, `value`, `label`. They know nothing about domain.
+
+```
+❌  HumanCards.vue, CarCards.vue
+✅  Cards.vue  — renders whatever { title, subtitle, description } it receives
+```
+
+**The full flow in a page:**
+
+```js
+// 1. fetch raw domain data in created
+created() {
+  this.rawCars = this.fetchCars()
+},
+
+// 2. map domain fields → abstract card shape
+getCards(cars) {
+  const toCard = (car) => ({
+    title: car.carName,
+    subtitle: car.brand,
+    description: car.year,
+  });
+  return cars.map(toCard);
+},
+```
+
+```pug
+//- 3. template passes the whole abstract object — component decides what to render
+div(v-for='card in getCards(rawCars)', :key='card.title')
+  Cards(:item='card')
+```
+
+The component `Cards.vue` has no idea what a "car" is. It receives an abstract `item` and decides itself which fields to render.
+
+---
+
+## Summary: The Cycle
+
+```
+asyncData/created → fetch rawData
+       ↓
+methods → transform rawData into display-ready shapes (getCards, getTableRows, etc.)
+       ↓
+template → call methods with rawData, pass results to abstract components
+       ↓
+component → renders abstract fields, knows nothing about domain
+```

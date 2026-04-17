@@ -1,6 +1,30 @@
 # Advocado
 
+Chrome extension for team performance tracking. Shows sales/team metrics, progress bars, and celebration effects when performance exceeds thresholds (magic images at 105%/110%, particle salute at 120%).
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+1. Check current version at `chrome://extensions/`.
+2. Bump `version` in `package.json` if needed, then run:
+   ```bash
+   npm run build
+   ```
+3. Upload `dist/extension_*.zip` to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole/).
+
 ## Changelog
+
+### [0.4.0] - 2026-03-18
+
+- Add magic image celebrations at 105% and 110% team performance (GIF overlays)
+- Introduce `magicImage.js` for once-per-day image reveal
+- Keep particle salute at 120% (unchanged)
 
 ### [0.3.5] - 2026-03-13
 
@@ -23,13 +47,3 @@
 ### [0.3.1] - 2024-01-16
 
 - Progress bar for sales team
-
----
-
-## Build
-
-Check current version at chrome://extensions/
-
-Update "version" in `package.json` and run `npm run build`.
-
-Upload `dist/extension_XXXX.zip` to chrome web store at https://chrome.google.com/webstore/devconsole/

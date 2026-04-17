@@ -1,0 +1,66 @@
+---
+description: Bootstrap 5.3 + Pug — use mixins and existing patterns; extend bootstrap-custom.scss; no ad-hoc classes or extra utilities
+globs:
+  - '**/server/views/**/*.pug'
+  - '**/src/styles/bootstrap-custom.scss'
+alwaysApply: false
+---
+
+# Bootstrap + Pug in this repo
+
+**Stack:** Bootstrap **5.3** styles ship as `/assets/index.css` from Vite; pages use Pug under `server/views/`.
+
+**Docs:** For markup and behavior, prefer Context7 MCP with library ID `/websites/getbootstrap_5_3` (see `docs/BOOTSTRAP_CONTEXT7.md`).
+
+**See also:** `server/views/AGENTS.md` (page data source map: top-of-file `//-` comment on data-heavy Pug pages). Where copy and render locals live: `.cursor/rules/server-content.mdc`.
+
+---
+
+## Custom CSS bundle
+
+- Only SCSS partials imported in `src/styles/bootstrap-custom.scss` produce utility/component CSS.
+- **Do not** use Bootstrap class names for components that are **not** imported there — add `@import 'bootstrap/scss/<partial>'` (e.g. `list-group`), then rebuild. **Do not** paper over missing styles with inline `style=` or new ad-hoc CSS classes unless the codebase already uses that escape hatch for the same case.
+
+---
+
+## Reuse Pug mixins and page patterns
+
+Before adding a new block of Bootstrap markup:
+
+1. Search `server/views/components/*.pug` and similar pages (`how-to.pug`, `oferta.pug`, `autoclient.pug`, `banks/integration.pug`, etc.).
+2. Prefer existing mixins and compositions:
+   - `HeadingGroup.pug` — `+HeadingGroup(title, headingLevel='h1', subtitle='', buttonName='', buttonHref='', buttonIcon='')` — `header.hstack` + `hgroup` (dynamic `h1`–`h6`) + optional subtitle + optional primary CTA (`ms-auto` link)
+   - `SectionCard.pug` — `section.bg-body.rounded-4` wrapper + block
+   - `Card.pug` — `+Card(card)` — `card.h-100.border-0.rounded-4`; Font Awesome icon, `h3.card-title`, optional subtitle, body `!{ card.text }`
+   - `FeaturesGrid.pug` — `+FeaturesGrid` (card grid; uses `+Card`)
+   - `faq.pug` — accordion FAQ
+   - `Modal.pug` — lead / modal form
+   - `paginator.pug`, `CodeSnippet.pug`, and others in the same folder
+
+**New** recurring Bootstrap structures → **new** `server/views/components/<name>.pug` **mixin** (`mixin` + `block` or parameters). Put canonical Bootstrap 5.3 structure and allowed class cluster **inside** the mixin so templates stay thin.
+
+- **Global mixin** (many pages): add `include ../components/<Name>.pug` to `server/views/layouts/default.pug` next to `SectionCard` / `Modal` when appropriate.
+- **Local** use: `include` the component file only on pages that need it (same pattern as `FeaturesGrid.pug` on `how-to.pug` before `+FeaturesGrid`).
+
+---
+
+## Classes — minimal and consistent
+
+- **No new custom class names** for layout or decoration except established project hooks and utilities already in use (e.g. `data-odb-reveal`, `odb-img-themed` in `default.pug`, scroll/nav patterns in `navigation-integration.pug`).
+- **Do not add extra Bootstrap utilities** “just in case.” Match **existing clusters** for the same visual role (e.g. feature cards: `card`, `h-100`, `border-0`, `rounded-4`, `card-body`, `p-4` as in `FeaturesGrid.pug` / `Card.pug`).
+- **Do not re-wrap** mixin output in redundant `.row` / `.card` / extra spacing unless the design clearly needs it.
+
+---
+
+## New Bootstrap components inside mixins
+
+When you add a mixin for a Bootstrap component:
+
+- Follow **official 5.3** markup (structure, `data-bs-*`, ARIA, optional `role` where the docs show it).
+- Keep variants (e.g. `list-group-flush`, `accordion-flush`) **inside** the mixin; pages pass data or `block` content only.
+
+---
+
+## Scope of this rule
+
+This governs **new and touched** templates and `bootstrap-custom.scss`. It does **not** require refactoring unrelated legacy views in the same PR.

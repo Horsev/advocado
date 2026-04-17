@@ -1,4 +1,8 @@
 import { sortByKey, keysEmojiToString } from "../utils";
+import {
+  getPersonalPlanCompletionPercent,
+  getProratedPersonalPlanTarget,
+} from "./prorated-sales-plan";
 
 // in red, beige and black, fascism, 3 Reich, halftone, comix, world war 2
 
@@ -79,10 +83,16 @@ const parser = (
   },
   idx,
   managers,
+  referenceDate,
 ) => [
   {
     type: "avatar",
     name,
+    personalPlanCompletionPercent: getPersonalPlanCompletionPercent({
+      amountSuccessDeals,
+      salesPlanPerSeller: SALES_PLAN_PER_SELLER,
+      referenceDate,
+    }),
   },
   {
     type: "name",
@@ -105,45 +115,42 @@ const parser = (
   // { type: "currency", value: ARR },
 ];
 
-const getPerformance = (managers) => {
-  const salesPlan = SALES_PLAN_PER_SELLER;
-
+const getPerformance = (managers, referenceDate) => {
   const numberOfSellers = managers.length;
 
-  const dateNow = new Date();
-  const dayOfTheMounth = dateNow.getDate();
+  const proratedPersonalTarget = getProratedPersonalPlanTarget({
+    salesPlanPerSeller: SALES_PLAN_PER_SELLER,
+    referenceDate,
+  });
 
-  const teamSalesRevenuePlan = salesPlan * numberOfSellers;
-
-  const numDays = (yearNow, monthNow) =>
-    new Date(yearNow, monthNow, 0).getDate();
-
-  const [yearNow, monthNow] = [dateNow.getYear(), dateNow.getMonth()];
-
-  const numOfDaysInCurrentMounth = numDays(yearNow, monthNow);
-
-  const currentRevenuePlan =
-    (teamSalesRevenuePlan / numOfDaysInCurrentMounth) * dayOfTheMounth;
+  const currentRevenuePlan = proratedPersonalTarget * numberOfSellers;
 
   const revenueBySuccessDeals = managers.reduce(
-    (acc, { amountSuccessDeals }) => acc + amountSuccessDeals,
+    (accumulator, { amountSuccessDeals }) => accumulator + amountSuccessDeals,
     0,
   );
 
-  const teamPerformance = Math.round(
-    (revenueBySuccessDeals / currentRevenuePlan) * 100,
-  );
+  if (currentRevenuePlan === 0) {
+    return 0;
+  }
 
-  return teamPerformance;
+  return Math.round((revenueBySuccessDeals / currentRevenuePlan) * 100);
 };
 
-export const mapper = ({ managers }) => ({
-  id,
-  th,
-  rows: managers.sort(sortByKey("amountSuccessDeals")).map(parser),
-  avatars,
-  percent: getPerformance(managers),
-  legend,
-});
+export const mapper = ({ managers }) => {
+  const referenceDate = new Date();
+
+  const parseRow = (manager, idx) =>
+    parser(manager, idx, managers, referenceDate);
+
+  return {
+    id,
+    th,
+    rows: managers.sort(sortByKey("amountSuccessDeals")).map(parseRow),
+    avatars,
+    percent: getPerformance(managers, referenceDate),
+    legend,
+  };
+};
 
 export default mapper;

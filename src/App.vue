@@ -31,8 +31,41 @@ import { MAPPERS } from "./js/teams";
 
 import { reUrl } from "./js/regexp";
 import runSalute from "./js/salute.js";
+import showMagicImage from "./js/magicImage.js";
 
-const PERCENT_THRESHOLD = 120;
+const PERCENT_THRESHOLDS = [
+  {
+    threshold: 105,
+    run: showMagicImage,
+    imageUrl: "/Man Of Steel Superman Sticker.gif",
+    animation: "magicImageReveal",
+  },
+  {
+    threshold: 110,
+    run: showMagicImage,
+    imageUrl: "/Loop Win Sticker by Dice Dreams.gif",
+    animation: "loopWinReveal",
+  },
+  { threshold: 120, run: runSalute },
+];
+
+const byThresholdDesc = (a, b) => b.threshold - a.threshold;
+
+const getEntryForPercent = (percent) =>
+  [...PERCENT_THRESHOLDS]
+    .sort(byThresholdDesc)
+    .find((entry) => percent > entry.threshold);
+
+const runAnimationsForPercent = (percent) => {
+  if (percent == null) return;
+  const entry = getEntryForPercent(percent);
+  if (!entry) return;
+  if (entry.imageUrl != null) {
+    entry.run(entry.imageUrl, entry.animation);
+  } else {
+    entry.run();
+  }
+};
 
 export default {
   data: () => ({
@@ -87,7 +120,7 @@ export default {
     this.currentEndpoint = (await getLocalStorage("currentEndpoint")) || "";
   },
   async mounted() {
-    if (this.tableData?.percent > 125) runSalute();
+    runAnimationsForPercent(this.tableData?.percent);
     !!this.currentEndpoint && this.updateData();
   },
   watch: {
@@ -105,7 +138,7 @@ export default {
     },
     "tableData.percent": {
       handler(percent) {
-        if (percent != null && percent > PERCENT_THRESHOLD) runSalute();
+        runAnimationsForPercent(percent);
       },
     },
   },

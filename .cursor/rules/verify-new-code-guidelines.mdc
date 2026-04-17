@@ -1,0 +1,20 @@
+---
+description: After adding or changing code, agent MUST verify it against project guidelines before finishing
+alwaysApply: true
+---
+
+# Verify new and changed code
+
+Before you consider the task done for any **non-trivial** edit (new file, new behavior, refactors beyond a one-liner):
+
+1. **ESLint** — Run `eslint` on every touched `.js` / `.vue` file (or the changed hunk). Apply `--fix` where possible. Resolve or report remaining errors. See [`eslint.mdc`](eslint.mdc).
+
+2. **JS / Vue style** — Check against [`how-to-write-js.mdc`](how-to-write-js.mdc) and [`how-to-name-js.mdc`](how-to-name-js.mdc) (callbacks, naming, boundaries). For Vue, also [`vue-style.mdc`](vue-style.mdc) when relevant. External JSON / query: [`normalize-at-boundary.mdc`](normalize-at-boundary.mdc) (shape once at the edge).
+
+3. **Contracts** — If the change touches routes, handlers, profile API, forms, reveal, external callbacks, charts, Vue islands, or other documented areas, read/update the contract per [`contracts.mdc`](contracts.mdc) and `AGENTS.md`.
+
+4. **Server boundaries** — HTTP status: [`server-http-status.mdc`](server-http-status.mdc). Validators: [`server-validators.mdc`](server-validators.mdc). Page copy / `server/content/`: [`server-content.mdc`](server-content.mdc).
+
+5. **Markdown** — New or updated `.md` / `.mdc`: respect [`markdown-length-and-split.mdc`](markdown-length-and-split.mdc).
+
+Do not skip verification because the change “looks small”; if you only skip it, say why (e.g. typo in comment-only line).

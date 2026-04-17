@@ -14,6 +14,8 @@
           template(v-if="cell.type === 'avatar'")
             img.avatar(:src="tableData.avatars[cell.name]", :alt="cell.name", v-if="tableData.avatars[cell.name]")
             img.avatar-blank(src="/i/alien.svg", alt="Alien", v-else)
+            span.badge.personal-plan-completion(
+              v-if="cell.personalPlanCompletionPercent", :class="cell.personalPlanCompletionPercent < 100 ? 'bg-danger' : 'bg-success'") {{ formatPersonalPlanCompletionPercent(cell.personalPlanCompletionPercent) }}
 
           template(v-else-if="cell.type === 'name'")
             span {{ cell.name }}
@@ -45,6 +47,9 @@ export default {
   },
   methods: {
     toUKCurrency,
+    formatPersonalPlanCompletionPercent(percent) {
+      return `${Math.round(percent)}%`;
+    },
     getBgColor(percents) {
       const { grades, colors } = this;
       return `text-bg-${getColor(grades, colors)(percents)}`;
@@ -67,7 +72,13 @@ table
 		&:last-child
 			td
 				border-bottom: 0
-
+.personal-plan-completion
+	font-size: 0.5rem
+	position: relative
+	top: -0.5rem
+	display: flex
+	justify-content: center
+	align-items: center
 .avatar
 	width: 3rem
 	height: 3rem

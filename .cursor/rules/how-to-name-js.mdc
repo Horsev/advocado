@@ -1,0 +1,156 @@
+---
+description: Enforce clear, domain-driven naming
+globs: ['**/*.{js,jsx,ts,tsx,mjs,cjs,py,rb,go,java,cs,php,rs}']
+alwaysApply: true
+---
+
+You must use clear, intention-revealing, domain-consistent names.
+
+## Core rules
+
+- Name by business meaning, not implementation.
+- Use one term per concept; avoid synonyms.
+- Prefer explicitness over brevity.
+- Do not encode types in names unless useful.
+
+## Forbidden names
+
+- data, item, value, obj, arr, tmp, thing
+- manager, helper, util, common, misc
+- process, handle, do, run, foo, bar
+
+Allowed abbreviations: id, url, api, db, env
+
+## Variables
+
+- Use nouns; collections are plural.
+- Derived values must reflect transformation.
+- Booleans must start with: is, has, can, should
+
+Good:
+
+- user, users, filteredUsers, isActive
+
+Bad:
+
+- data, list, item, flag, value
+
+## Functions
+
+- Use verb + noun.
+- Verb must reflect actual behavior.
+
+Preferred verbs:
+get, find, create, update, delete, build, parse,
+format, validate, calculate, load, save, send, map
+
+Good:
+
+- getUserById, createInvoice, validateEmail
+
+Bad:
+
+- handleUser, processData, runTask
+
+## Pure vs side effects
+
+- Pure → computational names
+- Side-effect → operational names
+
+Good:
+
+- calculateTotal, formatCurrency, saveOrder
+
+Bad:
+
+- getTotal (if calculating)
+- processUser (unclear behavior)
+
+## Classes / components
+
+- PascalCase nouns, name by responsibility
+
+Allowed suffixes:
+Service, Repository, Controller, Factory,
+Adapter, Mapper, Validator
+
+Good:
+
+- UserService, InvoiceRepository
+
+Bad:
+
+- UserManager, DataHelper, CommonUtils
+
+## Constants
+
+- Use UPPER_SNAKE_CASE
+- Replace magic values with named constants
+
+Good:
+
+- MAX_RETRY_COUNT, ORDER_STATUS_PAID
+
+Bad:
+
+- LIMIT, STATUS_1
+
+## Files
+
+- Match main responsibility/export
+- Prefer kebab-case
+- No catch-all files
+
+Good:
+
+- user-service.js, calculate-tax.js
+
+Bad:
+
+- utils.js, helpers.js, common.js
+
+## DTOs / types
+
+Use suffixes when useful:
+Dto, Request, Response, Payload, Params, Options
+
+Good:
+
+- CreateUserRequest, UserResponse
+
+## Events
+
+- Past tense for events
+- Handlers derived from event
+
+Good:
+
+- userCreated, invoicePaid, onUserCreated
+
+Bad:
+
+- createUserEvent
+
+## Context prefixes
+
+Use only if needed:
+apiUser, dbUser, uiUser, rawResponse
+
+## Consistency
+
+- Do not mix: user/customer, invoice/bill
+- Do not mix: delete/remove unless semantics differ
+
+## Review checklist
+
+Reject names that:
+
+- Need comments to explain
+- Hide side effects
+- Are generic where domain is known
+- Introduce new synonyms
+- Break consistency
+
+## Rule
+
+If a name is easy to write but hard to understand — rename it.
