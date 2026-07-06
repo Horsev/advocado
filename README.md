@@ -20,6 +20,16 @@ npm run dev
 
 ## Changelog
 
+### [0.4.3] - 2026-07-06
+
+- Add Web sales team member Oleksandra Muntian and avatar (`i/om.jpg`)
+
+### [0.4.2] - 2026-04-17
+
+- Upgrade Vite to 8.0.0
+- Refactor `App.vue` endpoint handling and animation logic
+- ESLint/Prettier print width 80 and Vue component styling updates
+
 ### [0.4.1] - 2026-03-18
 
 - Show **personal performance** on sales avatars: prorated plan target vs closed revenue, badge on the avatar (green at 100%, red below)
