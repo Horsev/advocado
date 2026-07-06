@@ -13,6 +13,7 @@ const SALES_PLAN_PER_SELLER = 203885;
 const config = {
   id: 'Sales plan Web',
   avatars: {
+    'Oleksandra Muntian': 'i/om.jpg',
     'Vaskul Sofia': 'i/vs.jpg',
     'Gleb Orlov': 'i/og.jpg',
   },
