@@ -8,7 +8,7 @@ import {
 
 const REVENUE_PLAN_TO_PERCENT = 100;
 
-const SALES_PLAN_PER_SELLER = 203885;
+const SALES_PLAN_PER_SELLER = 204600;
 
 const config = {
   id: 'Sales plan Web',
